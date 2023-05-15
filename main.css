@@ -98,6 +98,7 @@ nav ul .aboutbutton a{
     margin: 5vw 5vh;
     font-size: 0.8em;
     justify-content: center;
+
 }
 
 
@@ -135,7 +136,7 @@ nav ul .aboutbutton a{
 
 .table th,
 .table td{
-    padding: 12px 0px;
+    padding: 1vw;
     width: 33vw;
     
 }
