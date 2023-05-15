@@ -17,9 +17,71 @@ body{
     scroll-behavior: none;
 
 }
+
+#main-container {
+  display: flex;
+  height: 90vh;
+  width: 96vw;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  margin-right: 2vw;
+  align-items: center;
+
+}
+
+#left-content{
+  /* Forces side columns to stay same width */
+  flex: 15vw 0 0;
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-y: none;
+  align-self: center;
+  padding: 2vw;
+  border: dashed black 2px;
+  border-radius: 20px;
+}
+
+#main-content{
+  display: flex;
+  height: 70vh;
+  justify-content: center;
+  align-items: center;
+  padding: 2vw;
+
+}
+
+
+
+/* Slideshow container */
+.slideshow-container {
+transform: translate(2vw, 2vw);
+height: 70vh;
+overflow: show;
+position: relative;
+margin: auto;
+display: flex;
+justify-content: end;
+align-items: end;
+border-radius: 20px;
+}
+
+
+
+.slideshow-container .mySlides img {
+  /* Shrinks images to fit container */
+  width: 100%; /* or any custom size */
+  height: 100%; 
+  object-fit: contain;
+  border-radius: 20px;
+}
+
+
   
 h4{
   font-size: 1.1em;
+  margin: 0;
 }
 strong{
   font-size: 0.9em;
@@ -29,6 +91,8 @@ strong{
 
 p{
   font-size: 0.8em;
+  margin: 0;
+  margin-top: -2em;
 }
 
 
@@ -68,9 +132,11 @@ p{
   font-size: 0.8em;
   letter-spacing: 0.1em;
   position: absolute;
-  top: 0;
+  top: -4vw;
   width: 100%;
   text-align: center;
+  font-weight: bold;
+
 }
 
 
@@ -79,12 +145,15 @@ p{
   color: black;
   font-size: 0.7em;
   position: absolute;
-  top: 0px;
+  top: -4vw;
+
+
 }
 
 a{
   text-decoration: none;
   font-weight: bold;
+  font-size: 0.8em;
   color: blue;
 }
 
@@ -220,56 +289,6 @@ cursor: url('logos/scroll.png'), pointer;
       transition: .3s;
   }
   
-
-#main-content{
-    display: flex;
-    padding: 2vw;
-    justify-content: center;
-    align-items: center;
-
-
-  }
-
-  #main-container {
-    display: flex;
-    height: 90vh;
-    margin-top: 10vh;
-    margin-right: 2vw;
-
-  }
-
-
-/* Slideshow container */
-.slideshow-container {
-  height: 80vh;
-  overflow: hidden;
-  position: relative;
-  margin: auto;
-  vertical-align: middle;
-  display: flex;
-  justify-content: center;
-  align-items: end;
-}
-
-
-  
-  #left-content{
-    /* Forces side columns to stay same width */
-    flex: 15vw 0 0;
-    height: 80vh;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    overflow-y: none;
-    padding: 2vw;
-    border: dashed black 2px;
-    border-radius: 20px;
-  }
-  
-  .mySlides img {
-    /* Shrinks images to fit container */
-    width: 90%;
-  }
 
 
 
