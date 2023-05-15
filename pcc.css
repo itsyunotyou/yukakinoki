@@ -169,6 +169,17 @@ p{
   
 }
 
+.videoInsert {
+  position: relative;
+  height: 70vh;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+}
 
 
 
