@@ -39,8 +39,9 @@ body{
   overflow-y: none;
   align-self: center;
   padding: 2vw;
-  border: dashed black 2px;
+  border: solid black 2px;
   border-radius: 20px;
+  box-shadow: 5px 10px;
 }
 
 #main-content{
@@ -65,7 +66,7 @@ margin: auto;
 display: flex;
 justify-content: end;
 align-items: end;
-border-radius: 20px;
+
 }
 
 
@@ -74,8 +75,9 @@ border-radius: 20px;
   /* Shrinks images to fit container */
   width: 100%; /* or any custom size */
   height: 100%; 
-  object-fit: contain;
-  border-radius: 20px;
+  border: solid black 2px;
+border-radius: 20px;
+box-shadow: 5px 10px;
 }
 
 
@@ -107,7 +109,7 @@ p{
   width: auto;
   padding: 16px;
 
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
   font-weight: bold;
   font-size: 0.7em;
   transition: 0.6s ease;
