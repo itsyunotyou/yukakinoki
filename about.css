@@ -184,8 +184,9 @@ body{
   position: relative;
   text-decoration: none;
   font-weight: bold;
-  color: black;
-  border: solid black 2px;
+  color: rgb(255, 251, 0);
+  background-color: black;
+  border: dotted rgb(0, 255, 225) 10px;
   border-radius: 20px;
   padding: 1em;
   
