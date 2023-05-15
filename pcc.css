@@ -167,15 +167,6 @@ a{
 }
 
 
-.iphone:hover {
-    cursor: url('logos/scroll.png'), pointer;
-}
-
-
-.iphone:active {
-  cursor: url('logos/scroll.png'), pointer;
-}
-
 .eternapdf:hover {
   cursor: url('logos/scroll.png'), pointer;
 }
