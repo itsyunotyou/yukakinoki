@@ -31,7 +31,7 @@ body{
 
 #left-content{
   /* Forces side columns to stay same width */
-  flex: 15vw 0 0;
+  flex: 15vw;
   height: 70vh;
   display: flex;
   flex-direction: row;
@@ -44,6 +44,7 @@ body{
 }
 
 #main-content{
+  flex: 81vw;
   display: flex;
   height: 70vh;
   justify-content: center;
@@ -308,3 +309,8 @@ footer{
   padding-right: 5vw;
 }
 
+.pdf{
+  height: 70vh;
+  border-radius: 20px;
+  object-fit: contain;
+}
