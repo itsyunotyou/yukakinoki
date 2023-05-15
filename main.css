@@ -1,0 +1,173 @@
+
+body{
+  margin:0;
+  height: 100vh;
+  width: 100vw;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; 
+  font-family: jap;
+  letter-spacing: 0.1em;
+  padding: 1vh 2vw;
+  overflow: hidden;
+  scroll-behavior: none;
+}
+
+#contents{
+  position: absolute;
+}
+
+
+@font-face {
+  font-family: 'cursive3';
+  src: url('cursive/Cursive.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'cloud';
+  src: url('cloude/Cloude_Regular_1.02.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+    font-family: 'jap';
+    src: url('japanese/ZenKakuGothicNew-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'jap';
+    src: url('japanese/ZenKakuGothicNew-Bold.ttf');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+nav{
+    display: flex;
+    align-items: center;
+}
+
+ul{
+    padding-inline-start: 0;
+}
+nav ul li{
+    list-style-type: none;
+    display: inline-block;
+    justify-content: flex-start;
+    padding: 0;
+    margin-right: 10px;
+    margin-left: 0;
+    font-size: 0.9em;
+}
+nav ul .workbutton a{
+    color: blue;
+    text-decoration: none;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+nav ul li a:hover{
+    color: red;
+    transition: .3s;
+}
+
+
+nav ul .aboutbutton a{
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+
+}
+
+
+.table{
+    border-collapse: collapse;
+    margin: 5vw 5vh;
+    font-size: 0.8em;
+    justify-content: center;
+}
+
+
+.table tr:hover{
+    animation: hover 6s infinite;
+}
+
+.table tr:hover td{
+   font-weight: bold;
+}
+
+@keyframes hover {
+    0% {color: rgb(142, 177, 222);}
+
+    50%   {color: rgba(213, 38, 38, 0.618);}
+
+    100% {color: rgb(142, 177, 222);}
+  }
+
+
+.table tr:hover tr{
+   color: rgb(132, 0, 0);
+    border-radius: 40%;
+}
+
+.table thead tr{
+    text-align: left;
+    font-weight: bold;
+}
+
+.table thead{
+    pointer-events: none;
+
+}
+
+.table th,
+.table td{
+    padding: 12px 0px;
+    width: 33vw;
+    
+}
+
+.table tr .years{
+    width: 33vw;
+}
+
+
+
+body{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  main{
+    flex: 1 0 auto;
+  }
+
+  footer{
+    position: absolute;
+    font-size: 0.5em;
+    letter-spacing: 0.1em;
+    width: 100%;
+    text-align: right;
+    width: 100%;
+    bottom: 0; /* stick to bottom */
+    right: 0;
+    margin: 0px;
+    flex-shrink: 0;
+    font-family: jap;
+    padding-bottom: 1vh;
+    padding-right: 1vw;
+  }
+  

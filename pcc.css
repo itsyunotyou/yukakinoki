@@ -1,0 +1,291 @@
+
+
+body{
+    margin:0;
+    width: 100vw;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; 
+    font-family: jap;
+    padding: 1vh 2vw;
+    overflow-x: hidden;
+    letter-spacing: 0.1em;
+    position: fixed;
+    scroll-behavior: none;
+
+}
+  
+h4{
+  font-size: 1.1em;
+}
+strong{
+  font-size: 0.9em;
+  letter-spacing: 0.1em;
+  line-height: 1.1em;
+}
+
+p{
+  font-size: 0.8em;
+}
+
+
+
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 0.7em;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+.prev{
+  left: 0;
+  border-radius: 3px 0 0 3px;
+}
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+
+
+/* Caption text */
+.text {
+  color: black;
+  font-size: 0.8em;
+  letter-spacing: 0.1em;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+}
+
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: black;
+  font-size: 0.7em;
+  position: absolute;
+  top: 0px;
+}
+
+a{
+  text-decoration: none;
+  font-weight: bold;
+  color: blue;
+}
+
+
+
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .prev, .next,.text {font-size: 11px}
+}
+
+
+.iphone:hover {
+    cursor: url('logos/scroll.png'), pointer;
+}
+
+
+.iphone:active {
+  cursor: url('logos/scroll.png'), pointer;
+}
+
+.eternapdf:hover {
+  cursor: url('logos/scroll.png'), pointer;
+}
+
+
+.eternapdf:active {
+cursor: url('logos/scroll.png'), pointer;
+}
+
+
+  :root * {
+    /* Pause the animation */
+    animation-play-state: paused;
+    /* Bind the animation to scroll */
+    animation-delay: calc(var(--scroll) * -1s);
+    /* These last 2 properites clean up overshoot weirdness */
+    animation-iteration-count: 1;
+    animation-fill-mode: both;
+  }
+    
+
+  .logos{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .logos img{
+    max-width: 100%;
+    max-height: 30px;
+    height: auto;
+    width: auto;
+  }
+
+  .logos{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .logos img{
+    max-width: 100%;
+    max-height: 30px;
+    height: auto;
+    width: auto;
+  }
+
+ 
+  
+  @font-face {
+    font-family: 'cursive3';
+    src: url('cursive/Cursive.ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'cloud';
+    src: url('cloude/Cloude_Regular_1.02.ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+      font-family: 'jap';
+      src: url('japanese/ZenKakuGothicNew-Regular.ttf');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+  }
+  
+  @font-face {
+      font-family: 'jap';
+      src: url('japanese/ZenKakuGothicNew-Bold.ttf');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+  }
+  
+  
+ 
+ 
+  nav{
+      align-items: center;
+      position: fixed;
+
+  }
+  
+  ul{
+      padding-inline-start: 0;
+  }
+  nav ul li{
+      list-style-type: none;
+      display: inline-block;
+  }
+  nav ul li a{
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9em;
+
+  }
+  
+  nav ul li a:hover{
+      color: red;
+      transition: .3s;
+  }
+  
+
+#main-content{
+    display: flex;
+    padding: 2vw;
+    justify-content: center;
+    align-items: center;
+
+
+  }
+
+  #main-container {
+    display: flex;
+    height: 90vh;
+    margin-top: 10vh;
+    margin-right: 2vw;
+
+  }
+
+
+/* Slideshow container */
+.slideshow-container {
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+
+  
+  #left-content{
+    /* Forces side columns to stay same width */
+    flex: 15vw 0 0;
+    height: 80vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: none;
+    padding: 2vw;
+    border: dashed black 2px;
+    border-radius: 20px;
+  }
+  
+  .mySlides img {
+    /* Shrinks images to fit container */
+    width: 90%;
+  }
+
+
+
+footer{
+  position: absolute;
+  font-size: 0.5em;
+  letter-spacing: 0.1em;
+  width: 100%;
+  text-align: right;
+  width: 100%;
+  bottom: 0; /* stick to bottom */
+  right: 0;
+  margin: 0px;
+  flex-shrink: 0;
+  font-family: jap;
+  padding-bottom: 3vh;
+  padding-right: 5vw;
+}
+

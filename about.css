@@ -1,0 +1,290 @@
+body{
+    margin:0;
+    width: 100vw;
+    height: 100vh;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; 
+    font-family: jap;
+    padding: 1vh 2vw;
+    overflow: none;
+    letter-spacing: 0.1em;
+    scroll-behavior: none;
+    position: fixed;
+
+  }
+
+
+
+  .description{
+    display: flex;
+    flex-direction: row;
+    gap: 7vw;
+    width: 100vw;
+  }
+
+  .description div{
+    flex: 50%;
+  }
+
+
+
+
+
+:root * {
+  /* Pause the animation */
+  animation-play-state: paused;
+  /* Bind the animation to scroll */
+  animation-delay: calc(var(--scroll) * -1s);
+  /* These last 2 properites clean up overshoot weirdness */
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+  
+  #contents{
+    position: absolute;
+  }
+  
+  
+  @font-face {
+    font-family: 'cursive3';
+    src: url('cursive/Cursive.ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'cloud';
+    src: url('cloude/Cloude_Regular_1.02.ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+      font-family: 'jap';
+      src: url('japanese/ZenKakuGothicNew-Regular.ttf');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+  }
+  
+  @font-face {
+      font-family: 'jap';
+      src: url('japanese/ZenKakuGothicNew-Bold.ttf');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+  }
+  
+  .text-box h2{
+    font-size: 0.9em;
+
+  }
+
+  .text-box small{
+    font-size: 0.9em;
+  }
+
+  .text-box p{
+    font-size: 0.9em;
+  }
+  
+  p{
+    font-size: 0.8em;
+  }
+
+  main{
+    max-width: 90vw;
+  }
+
+  nav{
+      display: flex;
+      align-items: center;
+  }
+  
+  ul{
+      padding-inline-start: 0;
+  }
+  nav ul li{
+      list-style-type: none;
+      display: inline-block;
+      padding: 0;
+      margin-right: 10px;
+      margin-left: 0;
+      font-size: 0.9em;
+  }
+  
+  nav ul .workbutton a{
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+  }
+  
+  nav ul li a:hover{
+      color: red;
+      transition: .3s;
+  }
+
+
+  nav ul .aboutbutton a{
+    color: blue;
+    text-decoration: none;
+    font-weight: bold;
+    pointer-events: none;
+    
+  }
+
+  
+/* TIMELINE
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+.timeline ul li {
+  list-style-type: none;
+  position: relative;
+  width: 1vw;
+  margin: 0 auto;
+
+}
+
+.timeline ul li::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
+  background: inherit;
+  z-index: 1;
+}
+
+.den p{
+  margin-bottom: 5vh;
+}
+
+.timeline ul li div {
+  position: relative;
+  bottom: 0;
+  width: 35vw;
+  padding: 1vw;
+  border-style: dashed;
+  border-width: 1px;
+  border-radius: 10px;
+  margin-bottom: 1vh;
+  
+}
+
+a{
+  text-decoration: none;
+  font-weight: bold;
+  color: red;
+}
+
+
+.timeline ul li:nth-child(odd) div {
+  left: -20vw;
+}
+
+img{
+  width: 200px;
+}
+
+.timeline ul li:nth-child(even) div {
+  left: -20vw;
+}
+
+
+
+time {
+  display: block;
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.timeline ul li div p{
+  font-weight: 1rem;
+}
+
+
+/* EFFECTS
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.timeline ul li::after {
+  transition: background 0.5s ease-in-out;
+}
+
+
+
+.timeline ul li div {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.timeline ul li:nth-child(odd) div {
+  transform: translate3d(200px, 0, 0);
+}
+
+.timeline ul li:nth-child(even) div {
+  transform: translate3d(-200px, 0, 0);
+}
+
+.timeline ul li.in-view div {
+  transform: none;
+  visibility: visible;
+  opacity: 1;
+}
+
+
+/* GENERAL MEDIA QUERIES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+@media screen and (max-width: 900px) {
+  .timeline ul li div {
+    width: 250px;
+  }
+  .timeline ul li:nth-child(even) div {
+    left: -289px;
+    /*250+45-6*/
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .timeline ul li {
+    margin-left: 20px;
+  }
+  .timeline ul li div {
+    width: calc(100vw - 91px);
+  }
+  .timeline ul li:nth-child(even) div {
+    left: 45px;
+  }
+  .timeline ul li:nth-child(even) div::before {
+    left: -15px;
+    border-width: 8px 16px 8px 0;
+    border-color: transparent #f45b69 transparent transparent;
+  }
+}
+
+
+
+footer{
+  position: absolute;
+  font-size: 0.5em;
+  letter-spacing: 0.1em;
+  width: 100%;
+  text-align: right;
+  width: 100%;
+  bottom: 0; /* stick to bottom */
+  right: 0;
+  margin: 0px;
+  flex-shrink: 0;
+  font-family: jap;
+  padding-bottom: 3vh;
+  padding-right: 5vw;
+}
