@@ -22,12 +22,12 @@ body{
   .description{
     display: flex;
     flex-direction: row;
-    gap: 7vw;
+    gap: 5vw;
     width: 100vw;
   }
 
   .description div{
-    flex: 50%;
+    flex: 20%;
   }
 
 
@@ -125,13 +125,13 @@ body{
   }
   
   nav ul li a:hover{
-      color: red;
+      color: rgb(236, 122, 122);
       transition: .3s;
   }
 
 
   nav ul .aboutbutton a{
-    color: blue;
+    color: rgb(52, 194, 178);
     text-decoration: none;
     font-weight: bold;
     pointer-events: none;
@@ -151,29 +151,34 @@ body{
 
 }
 
-.timeline ul li::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%);
-  background: inherit;
-  z-index: 1;
-}
 
 
 
 .timeline ul li div {
   position: relative;
   bottom: 0;
-  width: 35vw;
+  width: 40vw;
   padding: 1vw;
-  border: solid black 2px;
+  border: solid black 1px;
   border-radius: 20px;
-  margin-bottom: 1vh;
+  margin-bottom: 2vh;
   box-shadow: 5px 10px;
   
+
+}
+
+.timeline ul li div:hover{
+  border: solid black 1px;
+  border-radius: 20px;
+  margin-bottom: 1vh;
+  box-shadow: rgb(238, 213, 255) 5px 10px;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  margin-bottom: 2vh;
+  border: dotted rgb(236, 122, 122) 5px;
   
+  
+
 }
 
 .lala p{
@@ -186,7 +191,19 @@ body{
   font-weight: bold;
   color: rgb(255, 252, 91);
   background-color: black;
-  border: dotted rgb(0, 255, 225) 10px;
+  border: dotted rgb(52, 194, 178) 5px;
+  border-radius: 20px;
+  padding: 1em;
+  
+}
+
+.yeet:hover{
+  position: relative;
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(52, 194, 178);
+  background-color: black;
+  border: dotted rgb(255, 252, 91) 5px;
   border-radius: 20px;
   padding: 1em;
   
@@ -194,7 +211,7 @@ body{
 
 
 .timeline ul li:nth-child(odd) div {
-  left: -20vw;
+  left: -25vw;
 }
 
 img{
@@ -202,7 +219,7 @@ img{
 }
 
 .timeline ul li:nth-child(even) div {
-  left: -20vw;
+  left: -25vw;
 }
 
 

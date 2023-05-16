@@ -82,6 +82,7 @@ box-shadow: 5px 10px;
 }
 
 
+
   
 h4{
   font-size: 1.1em;
@@ -161,11 +162,50 @@ p{
   position: relative;
   color: rgb(255, 251, 0);
   background-color: black;
-  border: dotted rgb(0, 255, 225) 10px;
+  border: dotted rgb(0, 255, 225) 5px;
   border-radius: 20px;
   padding: 1em;
   text-align: center;
   margin-bottom: 2em;
+  
+}
+
+.haco:hover{
+  position: relative;
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(0, 255, 225);
+  background-color: black;
+  border: dotted rgb(255, 252, 91) 5px;
+  border-radius: 20px;
+  padding: 1em;
+  
+}
+
+.haco2{
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.8em;
+  position: relative;
+  color: rgb(236, 122, 122);
+  background-color: black;
+  border: dotted rgb(238, 213, 255) 5px;
+  border-radius: 20px;
+  padding: 1em;
+  text-align: center;
+  margin-bottom: 2em;
+  
+}
+
+.haco2:hover{
+  position: relative;
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(238, 213, 255);
+  background-color: black;
+  border: dotted  rgb(236, 122, 122) 5px;
+  border-radius: 20px;
+  padding: 1em;
   
 }
 
@@ -299,7 +339,7 @@ cursor: url('logos/scroll.png'), pointer;
   }
   
   nav ul li a:hover{
-      color: red;
+      color: rgb(236, 122, 122);
       transition: .3s;
   }
   
