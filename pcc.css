@@ -82,12 +82,15 @@ box-shadow: 5px 10px;
 }
 
 
-.slideshow-container .mySlides video {
+.slideshow-container .mySlides  embed {
   /* Shrinks images to fit container */
-  width: 99.57%; /* or any custom size */
-  height: 100%; 
-
-  border: solid black 2px;
+  position: absolute;
+  left: -50vw;
+  top: -16vh;
+  width: 100vw; /* or any custom size */
+  height: 100vh;
+  transform: scale(0.7);
+border: solid black 2px;
 border-radius: 20px;
 box-shadow: 5px 10px;
 }
@@ -149,8 +152,10 @@ p{
   font-size: 0.8em;
   letter-spacing: 0.1em;
   position: absolute;
-  top: -4vw;
-  width: 100%;
+  white-space: nowrap;
+  top: -7vh;
+  left: -6vw;
+  width: 300%;
   text-align: center;
   font-weight: bold;
 
