@@ -17,6 +17,10 @@ body{
 
   }
 
+  .aboutbutton, .workbutton{
+    font-size: 0.8em;
+}
+
 
 
   .description{

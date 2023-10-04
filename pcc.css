@@ -32,7 +32,7 @@ body{
 #left-content{
   /* Forces side columns to stay same width */
   flex: 15vw;
-  height: 70vh;
+  height: 73vh;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -40,14 +40,13 @@ body{
   align-self: center;
   padding: 2vw;
   border: solid black 2px;
-  border-radius: 20px;
-  box-shadow: 5px 10px;
+
 }
 
 #main-content{
   flex: 81vw;
   display: flex;
-  height: 70vh;
+  height: 80vh;
   justify-content: center;
   align-items: center;
   padding: 2vw;
@@ -58,41 +57,41 @@ body{
 
 /* Slideshow container */
 .slideshow-container {
-transform: translate(2vw, 2vw);
-height: 70vh;
-overflow: show;
-position: relative;
-margin: auto;
-display: flex;
-justify-content: end;
-align-items: end;
-
+  height: 80vh;
+  width: 75vw;
+  overflow: show;
+  position: relative;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
 
 .slideshow-container .mySlides img {
   /* Shrinks images to fit container */
-  width: 100%; /* or any custom size */
+  width: 100%;; /* or any custom size */
   height: 100%; 
 
-  border: solid black 2px;
-border-radius: 20px;
-box-shadow: 5px 10px;
+
+
+justify-content: center;
+align-items: center;
 }
 
 
 .slideshow-container .mySlides  embed {
   /* Shrinks images to fit container */
   position: absolute;
-  left: -50vw;
-  top: -16vh;
+  left: -12vw;
+  top: -11vh;
   width: 100vw; /* or any custom size */
   height: 100vh;
-  transform: scale(0.7);
-border: solid black 2px;
-border-radius: 20px;
-box-shadow: 5px 10px;
+  transform: scale(0.75);
+
+justify-content: center;
+align-items: center;
 }
 
 
@@ -100,7 +99,7 @@ box-shadow: 5px 10px;
 
   
 h4{
-  font-size: 1.1em;
+  font-size: 1em;
   margin: 0;
 }
 strong{
@@ -115,34 +114,41 @@ p{
   margin-top: -2em;
 }
 
-
+.homebutton{
+  font-size: 0.8em;
+}
 
 
 /* Next & previous buttons */
 .prev, .next {
   cursor: pointer;
   position: absolute;
-  top: 50%;
+  top: -8vh;
   width: auto;
-  padding: 16px;
-
-  color: rgb(0, 0, 0);
+  color: black;
+  font-size: 0.9em;
   font-weight: bold;
-  font-size: 0.7em;
   transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
   user-select: none;
+}
+
+
+.prev:hover{
+  color: red;
+}
+
+.next:hover{
+  color: red;
 }
 
 .prev{
   left: 0;
-  border-radius: 3px 0 0 3px;
 }
 /* Position the "next button" to the right */
 .next {
   right: 0;
-  border-radius: 3px 0 0 3px;
 }
+
 
 
 
@@ -152,8 +158,10 @@ p{
   font-size: 0.8em;
   letter-spacing: 0.1em;
   position: absolute;
-  top: -4vw;
-  width: 100%;
+  top: -7vh;
+  left: 3vw;
+  width: 70vw;
+  justify-content: center;
   text-align: center;
   font-weight: bold;
 
@@ -179,7 +187,7 @@ p{
   color: black;
   font-size: 0.7em;
   position: absolute;
-  top: -4vw;
+  top: -7vw;
 
 
 }
@@ -242,7 +250,7 @@ p{
   position: relative;
   height: 70vh;
   overflow: hidden;
-  border-radius: 20px;
+
 }
 
 video {

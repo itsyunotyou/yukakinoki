@@ -146,7 +146,9 @@ nav ul .aboutbutton a{
     
 }
 
-
+.aboutbutton, .workbutton{
+    font-size: 0.8em;
+}
 
 
   footer{
