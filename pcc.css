@@ -71,7 +71,7 @@ body{
 
 .slideshow-container .mySlides img {
   /* Shrinks images to fit container */
-  width: 100%;; /* or any custom size */
+  width: 100%; /* or any custom size */
   height: 100%; 
 
 
@@ -84,8 +84,8 @@ align-items: center;
 .slideshow-container .mySlides  embed {
   /* Shrinks images to fit container */
   position: absolute;
-  left: -12vw;
-  top: -11vh;
+  left: -12.5vw;
+  top: -7.2vh;
   width: 100vw; /* or any custom size */
   height: 100vh;
   transform: scale(0.75);
@@ -123,30 +123,37 @@ p{
 .prev, .next {
   cursor: pointer;
   position: absolute;
-  top: -8vh;
+  top: -7vh;
   width: auto;
-  color: black;
-  font-size: 0.9em;
+  font-size: 1em;
   font-weight: bold;
   transition: 0.6s ease;
   user-select: none;
+  padding-left: 7px;
+  padding-right: 6px;
+  color: white;
+  background-color: black;
+  border-radius: 10px;
+  border-width: 3px;
+  padding-top: -5px;
+  
 }
 
 
 .prev:hover{
-  color: red;
+  background-color: red;
 }
 
 .next:hover{
-  color: red;
+  background-color:red;
 }
 
 .prev{
-  left: 0;
+  left: 0vw;
 }
 /* Position the "next button" to the right */
 .next {
-  right: 0;
+  right: 0vw;
 }
 
 
@@ -158,7 +165,7 @@ p{
   font-size: 0.8em;
   letter-spacing: 0.1em;
   position: absolute;
-  top: -7vh;
+  top: 0vh;
   left: 3vw;
   width: 70vw;
   justify-content: center;
@@ -174,7 +181,7 @@ p{
   letter-spacing: 0.1em;
   position: absolute;
   white-space: nowrap;
-  top: -7vh;
+  top: -5vh;
   left: -6vw;
   width: 300%;
   text-align: center;
@@ -376,7 +383,7 @@ cursor: url('logos/scroll.png'), pointer;
   }
   
   nav ul li a:hover{
-      color: rgb(236, 122, 122);
+      color: red;
       transition: .3s;
   }
   
