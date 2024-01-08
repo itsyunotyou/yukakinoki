@@ -1,21 +1,25 @@
-body{
-    margin:0;
-    width: 100vw;
-    height: 100vh;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; 
-    font-family: jap;
-    padding: 1vh 2vw;
-    overflow: none;
-    letter-spacing: 0.1em;
-    scroll-behavior: none;
-    position: fixed;
 
-  }
+body{
+  min-height: 100vh;
+  padding: 0;
+margin:0;
+justify-content: center;
+text-align: center;
+top: 0;
+left: 0;
+width: auto;
+-webkit-touch-callout: none; /* iOS Safari */
+-webkit-user-select: none; /* Safari */
+-khtml-user-select: none; /* Konqueror HTML */
+-moz-user-select: none; /* Old versions of Firefox */
+-ms-user-select: none; /* Internet Explorer/Edge */
+user-select: none; 
+font-family: jap;
+letter-spacing: 0.1em;
+padding: 1vh 2vw;
+overflow: hidden;
+scroll-behavior: none;
+}
 
   .aboutbutton, .workbutton{
     font-size: 0.8em;
@@ -106,41 +110,49 @@ body{
   }
 
   nav{
-      display: flex;
-      align-items: center;
-  }
-  
-  ul{
-      padding-inline-start: 0;
-  }
-  nav ul li{
-      list-style-type: none;
-      display: inline-block;
-      padding: 0;
-      margin-right: 10px;
-      margin-left: 0;
-      font-size: 0.9em;
-  }
-  
-  nav ul .workbutton a{
-      color: black;
-      text-decoration: none;
-      font-weight: bold;
-  }
-  
-  nav ul li a:hover{
-      color: rgb(236, 122, 122);
-      transition: .3s;
-  }
+    align-items: right;
 
+}
 
-  nav ul .aboutbutton a{
+ul{
+    text-align: right;
+    padding-left: 0;
+}
+
+nav ul p{
+    list-style-type: none;
+    display: inline-block;
+    justify-content: flex-start;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9em;
+    float: left;
+}
+nav ul li{
+    list-style-type: none;
+    display: inline-block;
+    padding: 0;
+    right: 0;
+    font-size: 0.9em;
+}
+nav ul .workbutton a{
     color: rgb(52, 194, 178);
     text-decoration: none;
-    font-weight: bold;
     pointer-events: none;
-    
-  }
+}
+
+nav ul li a:hover{
+    color: rgb(236, 122, 122);
+    transition: .3s;
+}
+
+
+nav ul .aboutbutton a{
+    color: black;
+    text-decoration: none;
+
+}
+
 
   
 /* TIMELINE
@@ -307,3 +319,4 @@ footer{
   padding-bottom: 3vh;
   padding-right: 5vw;
 }
+
