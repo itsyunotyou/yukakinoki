@@ -92,7 +92,7 @@ nav ul .listbutton a{
     pointer-events: none;
 }
 
-nav ul li a, :hover{
+nav ul .aboutbutton a:hover, nav ul .gallerybutton a:hover{
     color: rgb(236, 122, 122);
     transition: .3s;
 }
