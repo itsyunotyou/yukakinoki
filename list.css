@@ -115,25 +115,25 @@ nav ul .aboutbutton a, nav ul .gallerybutton a{
 }
 
 .table tr{
-    border: 0;
     display: block;
     margin: 5px;
+    border: dotted rgb(255, 255, 255) 3px;
 }
 
 .table tr:hover{
     animation: hover 3s ease-in-out infinite;
-    border-radius: 20px;
+
 }
 
 
 @keyframes hover {
-    0% {border: dotted rgb(238, 213, 255) 3px; border-radius: 20px; font-weight: bold; background-color: black; color: white;
+    0% {border: dotted rgb(236, 122, 122)  3px;   color: black;
     }
 
-    50%   {border: dotted rgb(236, 122, 122) 6px; border-radius: 20px; font-weight: bold;  background-color: black; color: white;
+    50%   {border: dotted rgb(255, 157, 52) 3px; color: black;
     }
 
-    100% {border: dotted rgb(255, 252, 91) 3px; border-radius: 20px; font-weight: bold; background-color: black; color: white;
+    100% {border: dotted rgb(236, 122, 122)  3px;  color: black;
     }
   }
 
