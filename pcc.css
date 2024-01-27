@@ -65,14 +65,14 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 
 
 .slideshow-container .mySlides img {
   /* Shrinks images to fit container */
-  width: 100%; /* or any custom size */
-  height: 100%; 
+  height: 95%;
 
 
 
