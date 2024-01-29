@@ -4,6 +4,8 @@ var tableRows = document.querySelectorAll("table tr");
 // Attach a click event listener to each table row
 tableRows.forEach(function(row) {
   row.addEventListener("click", function() {
+
+        
     // Get the value of the 'href' attribute of the clicked row
     var hrefValue = this.getAttribute("data-tab");
 
@@ -17,7 +19,9 @@ tableRows.forEach(function(row) {
       }
     });
 
-    targetElement.style.display = "flex"; // Assuming the target element should be displayed
+    targetElement.style.display = "flex";
+  
+        // Assuming the target element should be displayed
     // Alternatively, you can use other methods to show the element, like adding a CSS class.
     // targetElement.classList.add("visible");
 

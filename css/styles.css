@@ -56,8 +56,13 @@ h3,
 h4,
 h5,
 h6,
-p{
+p,
+a,
+.table>thead,
+th{
   margin: 0;
+  letter-spacing: .1rem !important;
+  font-weight: normal !important;
 }
 
 .container .row {
@@ -184,4 +189,8 @@ p{
   overflow: hidden;
   row-gap: 1rem;
   
+}
+
+tbody>tr:after{
+  color: #0015ff;
 }
