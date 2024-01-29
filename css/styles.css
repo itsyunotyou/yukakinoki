@@ -153,15 +153,14 @@ p{
   flex: 1;
   overflow-x: scroll;
   overflow-y: hidden;
+  height: 65vh;
 }
   
-.archive-container{
-  display: flex;
-  flex-flow: column;
-  height: 100vh;
-  overflow: hidden;
-  row-gap: 3rem;
+
+.scroll-container img{
+  height: 70%;
 }
+
 
   .scroll-container {
     display: flex;
@@ -178,6 +177,11 @@ p{
 
 
 .body{
+  display: flex;
   height: 100vh;
+  flex-flow: column;
+  height: 100vh;
+  overflow: hidden;
+  row-gap: 1rem;
   
 }
