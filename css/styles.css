@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&display=swap');
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  outline: none;
+}
+
+:root{
+  /* Background Color*/
+  --bg-white: #ffff;
+
+  /* Text Colors */
+  --primary-color: #0000;
+  --secondary-color: #0015ff;
+  --tertiary-color: #0015ff87;
+  --light-color: #a9a9a900;
+  --dark-color: #a9a9a900;
+  --text-white: #a9a9a900;
+  --text-gray: #a9a9a900;
+  --anchor-color: #a9a9a900;
+
+  /* Font Family */
+
+  --primary-font: 'Roboto Mono', monospace;
+  --secondary-font: 'Roboto Mono', monospace;
+
+}
+
+html, body{  
+  font-family: var(--primary-font);
+  color: var(--primary-text);
+  font-size: 10px;
+  margin:0;
+  padding: 0;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; 
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p{
+  margin: 0;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+
+  float: right;
+  justify-self: right;
+}
+
+.nav-link{
+  text-align: right;
+}
+
+.navbar>.container-fluid{
+  align-items: flex-start !important;
+}
+.nav-link:hover{
+  color: var(--tertiary-color) !important;
+}
+
+.navbar-nav a.active{
+  color: var(--secondary-color) !important;
+}
+
+
+.navbar-toggler{
+  margin: 0 !important;
+  padding: 0 !important;
+  float: right;
+  border-color: transparent;
+  background-color: transparent;
+  outline: 0;
+  text-align: right !important;
+}
+
+.navbar-toggler:focus {
+  text-decoration: none;
+  outline: 0;
+  box-shadow: none !important;
+  text-align: right !important;
+}
+
+.container-button{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.no-padding{
+
+  text-align: right;
+}
+
+
+
+@media only screen and (max-width: 480px){
+  .aboutbutton, .listbutton, .gallerybutton{
+    font-size: 1.5em;
+}
+
+}
+
+
+
+.aboutbutton, .listbutton, .gallerybutton{
+    font-size: 0.8em;
+}
+
+
+  footer{
+    text-align: right;
+    bottom: 0; /* stick to bottom */
+    right: 20px; 
+    margin: 0px;
+
+  }
+  
+
+
+  div.scroll-container {
+    display: flex;
+    height: 90vh;
+    overflow: scroll;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  
+  ::-webkit-scrollbar {
+    display: none;
+  }

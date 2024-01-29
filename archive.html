@@ -31,7 +31,7 @@
                 <div class="container-button">
                     <button 
                     type="button" 
-                    class="navbar-toggler ml-auto hidden-sm-up float-xs-right" 
+                    class="navbar-toggler" 
                     data-bs-toggle="collapse" 
                     data-bs-target="#navbarSupportedContent" 
                     aria-controls="#navbarSupportedContent" 
@@ -45,19 +45,20 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ms-auto navbar-right px-3">
 
+
                             <li class="nav-item">
                                 <a class="nav-link"
                                     href="info.html">info</a>
                             </li>
 
                             <li class = "nav-item">
-                                <a class="nav-link active" 
+                                <a class="nav-link" 
                                     href="index.html"
                                     aria-current="page">gallery</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" 
+                                <a class="nav-link active" 
                                     href="archive.html">archive</a>
                             </li>
 
@@ -70,30 +71,65 @@
 
         <main>
 
-            <!-- Gallery -->
-            <section class="gallery_section">
-                <div class="scroll-container">
-                    <video class="videoInsert" type="video/mp4"  height="auto" autoplay loop muted  preload="auto" >
-                        <source  src="https://github.com/\itsyunotyou/yukakinoki/blob/master/haco/hoxtonad.mp4?raw=true" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+            <!-- Index -->
+            <section class="index_section">
+                <div class="container-fluid px-5">
+                    <table class="table table-hover">
+
+                        <thead>
+                            <tr>
+                                <th>When</th>
+                                <th>What</th>
+                                <th>For</th>
+                            </tr>
+                        </thead>
         
-                    <img width: 100% src="images/haco/business.png">
+                        <tr onclick="window.location='haco.html';" >
+                            <td class="years">2023</td>
+                            <td>Web & Motion Design</td>
+                            <td>Haco Hair Salon</td>
+                        </tr>
+            
+                        <tr onclick="window.location='pcc.html';">
+                            <td class="years">2023</td>
+                            <td>Digital & Web Design</td>
+                            <td>Prince Charles Cinema</td>
+                        </tr>
+                        <tr onclick="window.location='eterna.html';">
+                            <td class="years">2022-2023</td>
+                            <td>Logo & Brochure Design </td>
+                            <td>Eterna</td>
+                        </tr>
+                        <tr onclick="window.location='naida.html';">
+                            <td class="years">2022</td>
+                            <td>Interactive Therapy App Prototype</td>
+                            <td>Naida</td>
+                        </tr>
         
-                    <video class="videoInsert" type="video/mov" height="auto"  autoplay loop muted      preload="auto" >
-                        <source  src="https://github.com/\itsyunotyou/yukakinoki/blob/master/haco/igstoryad.mp4?raw=true"type="video/mp4">
-                        <source src="movie.ogg" type="video/ogg">
-                                Your browser does not support the video tag.
-                        </video>
-                    
-                    <img width: 100% src="images/naida/n1.jpeg">
+                        <tr onclick="window.location='pxibits.html';">
+                            <td class="years">2022</td>
+                            <td>Consultancy Project</td>
+                            <td>Pxibits</td>
+                        </tr>
         
+                        <tr>
+                            <td class="years">2021</td>
+                            <td>UX/UI Design Internship</td>
+                            <td>Unitu</td>
+                        </tr>
+            
+                        <tr onclick="window.location='bartlett.html';">
+                            <td class="years">2020</td>
+                            <td>Film Editing Internship</td>
+                            <td>University College London Bartlett</td>
+                        </tr>
+        
+        
+                    </table>
                 </div>
             </section>
-            <!-- End Gallery -->
+             <!-- End Index -->
 
-    
-    
         </main>
 
 
