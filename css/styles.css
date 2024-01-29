@@ -47,6 +47,7 @@ html, body{
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; 
+  overflow: hidden;
 }
 
 h1,
@@ -128,18 +129,39 @@ p{
   text-align: right;
 }
 
+.index-section{
+  position: fixed;
+}
 
+.sample{
+  display: flex;
+  height: 100%;
+}
 
+.sample > div{
+  display:none;   
+}
 
   footer{
     text-align: right;
     bottom: 0; /* stick to bottom */
-    right: 20px; 
     margin: 0px;
 
   }
-  
 
+.sample{
+  flex: 1;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+  
+.archive-container{
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+  overflow: hidden;
+  row-gap: 3rem;
+}
 
   .scroll-container {
     display: flex;
@@ -153,3 +175,9 @@ p{
   ::-webkit-scrollbar {
     display: none;
   }
+
+
+.body{
+  height: 100vh;
+  
+}
