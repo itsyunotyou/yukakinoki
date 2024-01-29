@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css');
 
 *,
 *::before,
@@ -39,6 +40,7 @@ html, body{
   font-size: 10px;
   margin:0;
   padding: 0;
+  height: 100vh;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -khtml-user-select: none; /* Konqueror HTML */
@@ -55,6 +57,10 @@ h5,
 h6,
 p{
   margin: 0;
+}
+
+.container .row {
+  height: 100vh;
 }
 
 .material-symbols-outlined {
@@ -83,6 +89,15 @@ p{
   color: var(--secondary-color) !important;
 }
 
+
+.contact-link{
+  color: var(--tertiary-color) !important;
+  text-decoration: none;
+}
+
+.contact-link:hover{
+  color: var(--secondary-color) !important;
+}
 
 .navbar-toggler{
   margin: 0 !important;
@@ -115,19 +130,6 @@ p{
 
 
 
-@media only screen and (max-width: 480px){
-  .aboutbutton, .listbutton, .gallerybutton{
-    font-size: 1.5em;
-}
-
-}
-
-
-
-.aboutbutton, .listbutton, .gallerybutton{
-    font-size: 0.8em;
-}
-
 
   footer{
     text-align: right;
@@ -139,12 +141,13 @@ p{
   
 
 
-  div.scroll-container {
+  .scroll-container {
     display: flex;
     height: 90vh;
     overflow: scroll;
     white-space: nowrap;
     scrollbar-width: none;
+    gap: 1vw;
   }
   
   ::-webkit-scrollbar {
