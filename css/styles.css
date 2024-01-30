@@ -115,6 +115,10 @@ th{
   text-align: right !important;
 }
 
+.about-part{
+  max-width: 200px;
+  margin: 0 auto;
+}
 .navbar-toggler:focus {
   text-decoration: none;
   outline: 0;
@@ -138,10 +142,6 @@ th{
   position: fixed;
 }
 
-.sample{
-  display: flex;
-  height: 100%;
-}
 
 .sample > div{
   display:none;   
@@ -162,7 +162,7 @@ th{
 }
   
 
-.scroll-container img{
+.sample .scroll-container img{
   height: 70%;
 }
 
