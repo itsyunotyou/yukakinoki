@@ -197,10 +197,15 @@ td{
 }
 
 .selected {
-  background-color: var(--light-color);
+  background-color: var(--secondary-color) !important;
+
 
 }
 
+.table-hover>tbody>tr:hover {
+  background-color: var(--anchor-color);
+}
+
 .selected td{
-  color: var(--secondary-color);
+  color: white;
 }
