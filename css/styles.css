@@ -209,3 +209,7 @@ td{
 .selected td{
   color: white;
 }
+
+.check_put{
+  position: absolute;
+}
