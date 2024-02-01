@@ -41,6 +41,7 @@ html, body{
   margin:0;
   padding: 0;
   height: 100vh;
+  width: 100vw;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -khtml-user-select: none; /* Konqueror HTML */
@@ -48,6 +49,7 @@ html, body{
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; 
   overflow: hidden;
+  scroll-behavior: none;
 }
 
 h1,
@@ -91,6 +93,7 @@ th{
   color: var(--tertiary-color) !important;
 }
 
+
 .navbar-nav a.active{
   color: var(--secondary-color) !important;
 }
@@ -110,7 +113,6 @@ th{
   padding: 0 !important;
   float: right;
   border-color: transparent;
-  background-color: transparent;
   outline: 0;
   text-align: right !important;
 }
@@ -124,8 +126,14 @@ th{
   outline: 0;
   box-shadow: none !important;
   text-align: right !important;
+
 }
 
+.navbar{
+  position: absolute;
+  z-index: 300;
+  width: 100vw;
+}
 .container-button{
   margin: 0;
   padding: 0;
@@ -142,6 +150,13 @@ th{
   position: fixed;
 }
 
+.archive-container{
+  margin-top: 35px;
+}
+
+.gallery-section{
+  margin-top: 35px;
+}
 
 .sample > div{
   display:none;   
@@ -181,15 +196,7 @@ th{
   }
 
 
-.body{
-  display: flex;
-  height: 100vh;
-  flex-flow: column;
-  height: 100vh;
-  overflow: hidden;
-  row-gap: 1rem;
-  
-}
+
 
 td{
   background-color: transparent !important;
