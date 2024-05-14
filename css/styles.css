@@ -189,6 +189,28 @@ th{
     white-space: nowrap;
     scrollbar-width: none;
     gap: 1vw;
+    -webkit-animation-name: move;
+    -webkit-animation-duration: 30s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: left;
+    -webkit-animation-timing-function: linear;
+  }
+  
+.scroll-container:hover {
+    -webkit-animation-play-state: paused;
+  }
+  
+  @-webkit-keyframes move {
+    0% {
+      margin-left: 0%;
+    }
+    50% {
+      margin-left: -100%;
+    }
+
+    100% {
+      margin-left: 0%;
+    }
   }
   
   ::-webkit-scrollbar {
