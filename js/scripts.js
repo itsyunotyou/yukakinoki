@@ -1,5 +1,8 @@
 // Get all table rows within a table
-var tableRows = document.querySelectorAll("table tr");
+var tableRows = document.querySelectorAll("table tbody tr");
+var tableContainer = document.querySelector(".table-container");
+var toggleButton = document.getElementById("toggleTable");
+
 
 // Function to handle row click
 function handleRowClick(row) {
@@ -50,3 +53,24 @@ window.addEventListener('DOMContentLoaded', (event) => {
     handleRowClick(defaultRow);
   }
 });
+
+
+  // Toggle table collapse/expand
+  toggleButton.addEventListener("click", function() {
+    var selectedRow = document.querySelector("table tbody tr.selected");
+    if (tableContainer.classList.contains("collapsed")) {
+      tableContainer.classList.remove("collapsed");
+      tableRows.forEach(function(row) {
+        row.style.display = "";
+      });
+      toggleButton.textContent = "-";
+    } else {
+      tableContainer.classList.add("collapsed");
+      tableRows.forEach(function(row) {
+        if (!row.classList.contains('selected')) {
+          row.style.display = "none";
+        }
+      });
+      toggleButton.textContent = "+";
+    }
+  });

@@ -243,4 +243,48 @@ td{
   position: absolute;
 }
 
+.table-container {
+  margin-bottom: 20%;
+}
 
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.collapse-button {
+  margin-left: auto;
+  background-color: none;
+        background-color: transparent; /* Remove background */
+      border: none; /* Remove border */
+      color: inherit; /* Inherit text color */
+      cursor: pointer; /* Pointer cursor on hover */
+      font-size: 15px; /* Inherit font size */
+      padding: 0; /* Remove padding */
+}
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+th:nth-child(1), td:nth-child(1) {
+  width: 10%; /* Set the width for the first column */
+}
+th:nth-child(2), td:nth-child(2) {
+  width: 15%; /* Set the width for the second column */
+}
+th:nth-child(3), td:nth-child(3) {
+  width: 17%; /* Set the width for the third column */
+}
+
+th:nth-child(4), td:nth-child(4) {
+  width: 55%; /* Set the width for the third column */
+}
+
+th:nth-child(5), td:nth-child(5) {
+  width: 3%; /* Set the width for the third column */
+}
