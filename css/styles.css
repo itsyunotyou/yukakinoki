@@ -244,7 +244,7 @@ td{
 }
 
 .table-container {
-  margin-bottom: 20%;
+  margin: 2%;
 }
 
 .table-header {
@@ -282,9 +282,9 @@ th:nth-child(3), td:nth-child(3) {
 }
 
 th:nth-child(4), td:nth-child(4) {
-  width: 55%; /* Set the width for the third column */
+  width: 53%; /* Set the width for the third column */
 }
 
 th:nth-child(5), td:nth-child(5) {
-  width: 3%; /* Set the width for the third column */
+  width: 5%; /* Set the width for the third column */
 }
