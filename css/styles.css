@@ -470,6 +470,71 @@ footer p {
     overflow: auto;
   }
   
+  /* Mobile archive - fit everything on screen */
+  .archive-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: 0;
+    padding-top: 8vh;
+  }
+  
+  .table-container {
+    flex-shrink: 0;
+    overflow-y: auto;
+    max-height: 30vh;
+    scrollbar-width: none;
+    position: relative;
+  }
+  
+  .table-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Keep table position stable when toggling rows */
+  .table-container table {
+    margin: 0;
+  }
+  
+  .table-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+    position: sticky;
+    top: 0;
+    background: var(--bg-white);
+    z-index: 10;
+  }
+  
+  /* Mobile sample area */
+  .sample {
+    flex: 1;
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+  
+  .project-content {
+    height: 100%;
+  }
+  
+  .project-content .scroll-container {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+  
+  .project-content .scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .project-content .scroll-container img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+  
   nav {
     padding: 1vh 2vw;
   }
@@ -482,23 +547,8 @@ footer p {
     font-size: 0.85rem;
   }
   
-  .gallery-section,
-  .archive-container {
-    margin-top: 14vh;
-    padding: 1rem 0;
-    height: auto;
-  }
-  
-  .table-container {
-    max-height: none;
-    overflow: visible;
-  }
-  
-  /* Show collapse button on mobile */
-  .table-header {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
+  .gallery-section {
+    height: 100vh;
   }
   
   /* Mobile table - fit columns within viewport */
