@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Build script for yukakinoki.com
-Fetches data from Google Sheets and generates HTML pages
+Fetches data from Google Sheets and images from Google Drive folders
 """
 
 import os
@@ -9,12 +9,13 @@ import json
 import requests
 from datetime import datetime
 
-# Google Sheets configuration
+# Google configuration
 SHEET_ID = os.environ.get('GOOGLE_SHEET_ID', '')
 API_KEY = os.environ.get('GOOGLE_API_KEY', '')
+DRIVE_FOLDER_ID = os.environ.get('GOOGLE_DRIVE_FOLDER_ID', '')  # Root images folder
 
 # Sheet ranges
-PROJECTS_RANGE = 'Projects!A2:H'
+PROJECTS_RANGE = 'Projects!A2:K'
 INFO_RANGE = 'Info!A2:B'
 
 def fetch_sheet_data(sheet_id, range_name, api_key):
@@ -24,28 +25,86 @@ def fetch_sheet_data(sheet_id, range_name, api_key):
     response.raise_for_status()
     return response.json().get('values', [])
 
+def fetch_drive_folder_files(folder_id, api_key):
+    """Fetch all files from a Google Drive folder"""
+    url = f'https://www.googleapis.com/drive/v3/files'
+    params = {
+        'q': f"'{folder_id}' in parents and mimeType contains 'image/'",
+        'key': api_key,
+        'fields': 'files(id, name, mimeType, webContentLink, thumbnailLink)',
+        'orderBy': 'name'
+    }
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    return response.json().get('files', [])
+
+def get_drive_image_url(file_id):
+    """Convert Drive file ID to direct viewable URL"""
+    return f'https://drive.google.com/uc?export=view&id={file_id}'
+
 def parse_projects(rows):
-    """Parse project rows into structured data"""
+    """Parse all projects from single sheet"""
     projects = []
     for row in rows:
-        if len(row) < 3:  # Skip incomplete rows
+        if len(row) < 4:
             continue
         
         project = {
-            'name': row[0] if len(row) > 0 else '',
-            'type': row[1] if len(row) > 1 else 'image',
-            'file_path': row[2] if len(row) > 2 else '',
-            'thumbnail': row[3] if len(row) > 3 else '',
-            'description': row[4] if len(row) > 4 else '',
-            'category': row[5] if len(row) > 5 else 'gallery',
-            'order': int(row[6]) if len(row) > 6 and row[6].isdigit() else 999,
-            'visible': row[7].lower() == 'yes' if len(row) > 7 else True
+            # Archive table columns
+            'date': row[0] if len(row) > 0 else '',
+            'project_name': row[1] if len(row) > 1 else '',
+            'client': row[2] if len(row) > 2 else '',
+            'task': row[3] if len(row) > 3 else '',
+            
+            # Media columns
+            'type': row[4] if len(row) > 4 else 'none',  # drive_folder, image, video, or none
+            'media_source': row[5] if len(row) > 5 else '',  # Drive folder ID or file path
+            'thumbnail': row[6] if len(row) > 6 else '',
+            'description': row[7] if len(row) > 7 else '',
+            
+            # Control columns
+            'category': row[8] if len(row) > 8 else 'archive',
+            'order': int(row[9]) if len(row) > 9 and row[9].isdigit() else 999,
+            'visible': row[10].lower() == 'yes' if len(row) > 10 else True,
+            
+            # Will be populated with Drive images
+            'images': []
         }
         
         if project['visible']:
             projects.append(project)
     
     projects.sort(key=lambda x: x['order'])
+    return projects
+
+def fetch_project_images(projects, api_key):
+    """Fetch images from Google Drive for projects with drive_folder type"""
+    for project in projects:
+        if project['type'] == 'drive_folder' and project['media_source']:
+            try:
+                print(f"   📁 Fetching images for '{project['project_name']}'...")
+                files = fetch_drive_folder_files(project['media_source'], api_key)
+                
+                for file in files:
+                    project['images'].append({
+                        'id': file['id'],
+                        'name': file['name'],
+                        'url': get_drive_image_url(file['id']),
+                        'thumbnail': file.get('thumbnailLink', '')
+                    })
+                
+                print(f"      ✅ Found {len(project['images'])} images")
+            except Exception as e:
+                print(f"      ⚠️  Error fetching Drive folder: {e}")
+        
+        elif project['type'] in ['image', 'video']:
+            # Single file - add to images list
+            project['images'].append({
+                'url': project['media_source'],
+                'thumbnail': project['thumbnail'],
+                'name': project['project_name']
+            })
+    
     return projects
 
 def parse_info(rows):
@@ -58,20 +117,45 @@ def parse_info(rows):
             info[key] = value
     return info
 
-def generate_project_html(project):
-    """Generate HTML for a single project"""
-    if project['type'] == 'video':
-        thumbnail = project['thumbnail'] if project['thumbnail'] else project['file_path'].replace('.mp4', '.png')
-        return f'''        <a href="{project['file_path']}" class="project-item video">
+def generate_gallery_project_html(project):
+    """Generate HTML for a gallery project with multiple images"""
+    if not project['images']:
+        return ''
+    
+    # If project has multiple images, show them all
+    html_parts = []
+    for img in project['images']:
+        if project['type'] == 'video':
+            thumbnail = img.get('thumbnail', img['url'].replace('.mp4', '.png'))
+            html_parts.append(f'''        <a href="{img['url']}" class="project-item video">
             <img src="{thumbnail}" alt="{project['description']}">
             <div class="video-overlay">
                 <p>Your browser does not support the video tag.</p>
             </div>
-        </a>'''
-    else:
-        return f'''        <div class="project-item image">
-            <img src="{project['file_path']}" alt="{project['description']}">
-        </div>'''
+        </a>''')
+        else:
+            html_parts.append(f'''        <div class="project-item image">
+            <img src="{img['url']}" alt="{project['description']}">
+        </div>''')
+    
+    return '\n'.join(html_parts)
+
+def generate_archive_project_html(project):
+    """Generate HTML for archive project images (below table)"""
+    if not project['images']:
+        return ''
+    
+    html_parts = []
+    for img in project['images']:
+        if project['type'] == 'video':
+            thumbnail = img.get('thumbnail', img['url'].replace('.mp4', '.png'))
+            html_parts.append(f'''        <a href="{img['url']}" class="archive-image video">
+            <img src="{thumbnail}" alt="{project['description']}">
+        </a>''')
+        else:
+            html_parts.append(f'''        <img src="{img['url']}" alt="{project['description']}" class="archive-image">''')
+    
+    return '\n'.join(html_parts)
 
 def generate_nav():
     """Generate navigation HTML"""
@@ -95,9 +179,9 @@ def generate_footer():
 
 def generate_gallery_page(projects):
     """Generate the gallery/index page"""
-    gallery_projects = [p for p in projects if p['category'] == 'gallery']
+    gallery_projects = [p for p in projects if p['category'].lower() in ['gallery', 'both'] and len(p['images']) > 0]
     
-    project_html = '\n'.join([generate_project_html(p) for p in gallery_projects])
+    project_html = '\n'.join([generate_gallery_project_html(p) for p in gallery_projects])
     
     html = f'''<!DOCTYPE html>
 <html lang="en">
@@ -105,7 +189,7 @@ def generate_gallery_page(projects):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yukakinoki</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 {generate_nav()}
@@ -119,13 +203,27 @@ def generate_gallery_page(projects):
     return html
 
 def generate_archive_page(projects):
-    """Generate the archive page"""
-    archive_projects = [p for p in projects if p['category'] == 'archive']
+    """Generate the archive page with table and images"""
     
-    if archive_projects:
-        project_html = '\n'.join([generate_project_html(p) for p in archive_projects])
-    else:
-        project_html = ''
+    # Generate table rows
+    table_rows = []
+    for project in projects:
+        task = project['task']
+        if 'https://' in task or 'http://' in task:
+            import re
+            task = re.sub(r'(https?://[^\s]+)', r'<a href="\1" target="_blank">\1</a>', task)
+        
+        table_rows.append(f'''        <tr>
+            <td>{project['date']}</td>
+            <td>{project['project_name']}</td>
+            <td>{project['client']}</td>
+            <td>{task}</td>
+        </tr>''')
+    
+    table_html = '\n'.join(table_rows)
+    
+    # Generate images below table
+    images_html = '\n'.join([generate_archive_project_html(p) for p in projects if len(p['images']) > 0])
     
     html = f'''<!DOCTYPE html>
 <html lang="en">
@@ -133,12 +231,28 @@ def generate_archive_page(projects):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive - yukakinoki</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 {generate_nav()}
     <main class="archive">
-{project_html}
+        <table class="archive-table">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>PROJECT</th>
+                    <th>CLIENT</th>
+                    <th>TASK</th>
+                </tr>
+            </thead>
+            <tbody>
+{table_html}
+            </tbody>
+        </table>
+        
+        <div class="archive-images">
+{images_html}
+        </div>
     </main>
 {generate_footer()}
 </body>
@@ -148,7 +262,6 @@ def generate_archive_page(projects):
 
 def generate_info_page(info_data):
     """Generate the info page"""
-    # Default values
     bio_en = info_data.get('bio_english', '''Yu Kakinoki is a billingual interdisciplinary designer, currently based in Tokyo. Have developed a distinct eye for aesthetics by growing up in California, Japan, Hong Kong, and London. The goal is to push the boundaries of storytelling through spatial design - whether it be a tangible room, a digital space, or both. This website was built through GitHub Pages with self-learnt HTML, CSS, JavaScript, and Bootstrap. My dissertation title was 'To what extent is the aura relevant to a work of art in the age of biocybernetic simulation?'
 ''')
     
@@ -163,7 +276,7 @@ def generate_info_page(info_data):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yukakinoki</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 {generate_nav()}
@@ -188,11 +301,22 @@ def main():
     
     # Fetch data from Google Sheets
     print("📊 Fetching data from Google Sheets...")
+    
     try:
-        # Fetch projects
+        # Fetch all projects
         project_rows = fetch_sheet_data(SHEET_ID, PROJECTS_RANGE, API_KEY)
-        projects = parse_projects(project_rows)
-        print(f"✅ Found {len(projects)} projects")
+        all_projects = parse_projects(project_rows)
+        print(f"✅ Found {len(all_projects)} total projects")
+        
+        # Fetch images from Google Drive
+        print("📸 Fetching images from Google Drive...")
+        all_projects = fetch_project_images(all_projects, API_KEY)
+        
+        # Count by category
+        gallery_count = len([p for p in all_projects if p['category'].lower() in ['gallery', 'both'] and len(p['images']) > 0])
+        total_images = sum(len(p['images']) for p in all_projects)
+        print(f"✅ Total images loaded: {total_images}")
+        print(f"   └─ {gallery_count} projects will appear in gallery")
         
         # Fetch info page content
         try:
@@ -204,20 +328,22 @@ def main():
             info_data = {}
             
     except Exception as e:
-        print(f"❌ Error fetching sheet data: {e}")
+        print(f"❌ Error fetching data: {e}")
+        import traceback
+        traceback.print_exc()
         return
     
     # Generate pages
     print("📝 Generating HTML pages...")
     
     # Gallery page
-    gallery_html = generate_gallery_page(projects)
+    gallery_html = generate_gallery_page(all_projects)
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(gallery_html)
     print("✅ Generated index.html")
     
     # Archive page
-    archive_html = generate_archive_page(projects)
+    archive_html = generate_archive_page(all_projects)
     with open('archive.html', 'w', encoding='utf-8') as f:
         f.write(archive_html)
     print("✅ Generated archive.html")
