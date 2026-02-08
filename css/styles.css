@@ -246,13 +246,18 @@ tbody td:nth-child(4) { width: 50%; }
     flex-direction: column;
     overflow: hidden;
     margin-top: 0;
-    padding-top: 10vh;
+    padding-top: 6vh;
   }
   
   .table-container {
     flex-shrink: 0;
     overflow-y: auto;
     max-height: 25vh;
+    scrollbar-width: none;
+  }
+  
+  .table-container::-webkit-scrollbar {
+    display: none;
   }
   
   .sample {
@@ -270,6 +275,11 @@ tbody td:nth-child(4) { width: 50%; }
     gap: 0;
     overflow-x: auto;
     overflow-y: hidden;
+    scrollbar-width: none;
+  }
+  
+  .project-content .scroll-container::-webkit-scrollbar {
+    display: none;
   }
   
   .project-content .scroll-container img {
@@ -277,6 +287,11 @@ tbody td:nth-child(4) { width: 50%; }
     width: auto;
     flex-shrink: 0;
     object-fit: contain;
+  }
+  
+  /* Reduce table row padding on desktop */
+  tbody td {
+    padding: 0.6rem 1rem;
   }
 }
 
