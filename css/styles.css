@@ -105,13 +105,9 @@ html, body {
   user-select: none; 
   overflow: hidden;
   scroll-behavior: none;
-}
-
-body {
-  font-family: jap;
-  letter-spacing: 0.1em;
   padding: 1vh 2vw;
 }
+
 
 h1, h2, h3, h4, h5, h6, p, a, .table>thead, th {
   margin: 0;
