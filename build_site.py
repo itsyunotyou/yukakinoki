@@ -25,31 +25,11 @@ def fetch_sheet_data(sheet_id, range_name, api_key):
     response.raise_for_status()
     return response.json().get('values', [])
 
-def fetch_drive_folder_files(folder_id, api_key):
-    """Fetch all files from a Google Drive folder"""
-    url = f'https://www.googleapis.com/drive/v3/files'
-    params = {
-        'q': f"'{folder_id}' in parents and mimeType contains 'image/'",
-        'key': api_key,
-        'fields': 'files(id, name, mimeType, webContentLink, thumbnailLink)',
-        'orderBy': 'name'
-    }
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    return response.json().get('files', [])
-
-def get_drive_image_url(file_id):
-    """Convert Drive file ID to direct viewable URL"""
-    return f'https://drive.google.com/uc?export=view&id={file_id}'
-
 def parse_projects(rows):
     """Parse all projects from single sheet"""
     projects = []
-    print(f"   DEBUG: Received {len(rows)} rows from Google Sheets")
-    for i, row in enumerate(rows):
-        print(f"   DEBUG: Row {i}: length={len(row)}, data={row[:3] if len(row) >= 3 else row}")
+    for row in rows:
         if len(row) < 4:
-            print(f"   DEBUG: Skipping row {i} - too short")
             continue
         
         project = {
@@ -68,8 +48,6 @@ def parse_projects(rows):
             'thumbnail_image': None
         }
         
-        print(f"   DEBUG: Project '{project['project_name']}' visible={project['visible']}")
-        
         if project['visible']:
             projects.append(project)
     
@@ -78,26 +56,47 @@ def parse_projects(rows):
     return projects
 
 def fetch_project_images(projects, api_key):
-    """Fetch images from Google Drive for projects with drive_folder type"""
+    """Fetch images from local folders"""
+    import os
+    import glob
+    
     for project in projects:
-        if project['type'] == 'drive_folder' and project['media_source']:
+        if project['type'] == 'local_folder' and project['media_source']:
             try:
-                print(f"   📁 Fetching images for '{project['project_name']}'...")
-                files = fetch_drive_folder_files(project['media_source'], api_key)
+                print(f"   📁 Loading images for '{project['project_name']}'...")
+                
+                # Get the folder path (e.g., 'images/push/')
+                folder_path = project['media_source']
+                
+                # Find all image files in the folder
+                image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.webp']
+                image_files = []
+                
+                for ext in image_extensions:
+                    pattern = os.path.join(folder_path, ext)
+                    image_files.extend(glob.glob(pattern))
+                    # Also check uppercase extensions
+                    pattern = os.path.join(folder_path, ext.upper())
+                    image_files.extend(glob.glob(pattern))
+                
+                # Sort files alphabetically
+                image_files.sort()
                 
                 thumbnail_found = False
                 
-                for file in files:
+                for image_path in image_files:
+                    filename = os.path.basename(image_path)
+                    
                     img_data = {
-                        'id': file['id'],
-                        'name': file['name'],
-                        'url': get_drive_image_url(file['id']),
-                        'thumbnail': file.get('thumbnailLink', '')
+                        'id': filename,
+                        'name': filename,
+                        'url': image_path,
+                        'thumbnail': ''
                     }
                     project['images'].append(img_data)
                     
                     # Check if this is the specified gallery thumbnail
-                    if project['gallery_thumbnail'] and file['name'] == project['gallery_thumbnail']:
+                    if project['gallery_thumbnail'] and filename == project['gallery_thumbnail']:
                         project['thumbnail_image'] = img_data
                         thumbnail_found = True
                 
@@ -109,7 +108,7 @@ def fetch_project_images(projects, api_key):
                 if project.get('thumbnail_image'):
                     print(f"      🖼️  Gallery thumbnail: {project['thumbnail_image']['name']}")
             except Exception as e:
-                print(f"      ⚠️  Error fetching Drive folder: {e}")
+                print(f"      ⚠️  Error loading images from folder: {e}")
         
         elif project['type'] in ['image', 'video']:
             img_data = {
@@ -355,7 +354,7 @@ def main():
         all_projects = parse_projects(project_rows)
         print(f"✅ Found {len(all_projects)} total projects")
         
-        print("📸 Fetching images from Google Drive...")
+        print("📸 Loading images from local folders...")
         all_projects = fetch_project_images(all_projects, API_KEY)
         
         gallery_count = len([p for p in all_projects if p['category'].lower() in ['gallery', 'both'] and len(p['images']) > 0])
