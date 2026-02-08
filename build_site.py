@@ -12,7 +12,6 @@ from datetime import datetime
 # Google configuration
 SHEET_ID = os.environ.get('GOOGLE_SHEET_ID', '')
 API_KEY = os.environ.get('GOOGLE_API_KEY', '')
-DRIVE_FOLDER_ID = os.environ.get('GOOGLE_DRIVE_FOLDER_ID', '')  # Root images folder
 
 # Sheet ranges
 PROJECTS_RANGE = 'Projects!A2:K'
@@ -50,24 +49,17 @@ def parse_projects(rows):
             continue
         
         project = {
-            # Archive table columns
             'date': row[0] if len(row) > 0 else '',
             'project_name': row[1] if len(row) > 1 else '',
             'client': row[2] if len(row) > 2 else '',
             'task': row[3] if len(row) > 3 else '',
-            
-            # Media columns
-            'type': row[4] if len(row) > 4 else 'none',  # drive_folder, image, video, or none
-            'media_source': row[5] if len(row) > 5 else '',  # Drive folder ID or file path
+            'type': row[4] if len(row) > 4 else 'none',
+            'media_source': row[5] if len(row) > 5 else '',
             'thumbnail': row[6] if len(row) > 6 else '',
             'description': row[7] if len(row) > 7 else '',
-            
-            # Control columns
             'category': row[8] if len(row) > 8 else 'archive',
             'order': int(row[9]) if len(row) > 9 and row[9].isdigit() else 999,
             'visible': row[10].lower() == 'yes' if len(row) > 10 else True,
-            
-            # Will be populated with Drive images
             'images': []
         }
         
@@ -98,7 +90,6 @@ def fetch_project_images(projects, api_key):
                 print(f"      ⚠️  Error fetching Drive folder: {e}")
         
         elif project['type'] in ['image', 'video']:
-            # Single file - add to images list
             project['images'].append({
                 'url': project['media_source'],
                 'thumbnail': project['thumbnail'],
@@ -117,12 +108,15 @@ def parse_info(rows):
             info[key] = value
     return info
 
+def get_css_links():
+    """Generate CSS links - uses your existing styles.css"""
+    return '<link rel="stylesheet" href="css/styles.css">'
+
 def generate_gallery_project_html(project):
     """Generate HTML for a gallery project with multiple images"""
     if not project['images']:
         return ''
     
-    # If project has multiple images, show them all
     html_parts = []
     for img in project['images']:
         if project['type'] == 'video':
@@ -141,7 +135,7 @@ def generate_gallery_project_html(project):
     return '\n'.join(html_parts)
 
 def generate_archive_project_html(project):
-    """Generate HTML for archive project images (below table)"""
+    """Generate HTML for archive project images"""
     if not project['images']:
         return ''
     
@@ -182,6 +176,7 @@ def generate_gallery_page(projects):
     gallery_projects = [p for p in projects if p['category'].lower() in ['gallery', 'both'] and len(p['images']) > 0]
     
     project_html = '\n'.join([generate_gallery_project_html(p) for p in gallery_projects])
+    css_links = get_css_links()
     
     html = f'''<!DOCTYPE html>
 <html lang="en">
@@ -189,7 +184,7 @@ def generate_gallery_page(projects):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yukakinoki</title>
-    <link rel="stylesheet" href="css/style.css">
+    {css_links}
 </head>
 <body>
 {generate_nav()}
@@ -205,7 +200,6 @@ def generate_gallery_page(projects):
 def generate_archive_page(projects):
     """Generate the archive page with table and images"""
     
-    # Generate table rows
     table_rows = []
     for project in projects:
         task = project['task']
@@ -221,9 +215,8 @@ def generate_archive_page(projects):
         </tr>''')
     
     table_html = '\n'.join(table_rows)
-    
-    # Generate images below table
     images_html = '\n'.join([generate_archive_project_html(p) for p in projects if len(p['images']) > 0])
+    css_links = get_css_links()
     
     html = f'''<!DOCTYPE html>
 <html lang="en">
@@ -231,7 +224,7 @@ def generate_archive_page(projects):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive - yukakinoki</title>
-    <link rel="stylesheet" href="css/style.css">
+    {css_links}
 </head>
 <body>
 {generate_nav()}
@@ -269,6 +262,7 @@ def generate_info_page(info_data):
     
     contact_email = info_data.get('contact_email', 'yukakinoki@gmail.com')
     contact_text = info_data.get('contact_text', 'contact')
+    css_links = get_css_links()
     
     html = f'''<!DOCTYPE html>
 <html lang="en">
@@ -276,7 +270,7 @@ def generate_info_page(info_data):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yukakinoki</title>
-    <link rel="stylesheet" href="css/style.css">
+    {css_links}
 </head>
 <body>
 {generate_nav()}
@@ -299,26 +293,21 @@ def main():
     """Main build process"""
     print("🚀 Starting build process...")
     
-    # Fetch data from Google Sheets
     print("📊 Fetching data from Google Sheets...")
     
     try:
-        # Fetch all projects
         project_rows = fetch_sheet_data(SHEET_ID, PROJECTS_RANGE, API_KEY)
         all_projects = parse_projects(project_rows)
         print(f"✅ Found {len(all_projects)} total projects")
         
-        # Fetch images from Google Drive
         print("📸 Fetching images from Google Drive...")
         all_projects = fetch_project_images(all_projects, API_KEY)
         
-        # Count by category
         gallery_count = len([p for p in all_projects if p['category'].lower() in ['gallery', 'both'] and len(p['images']) > 0])
         total_images = sum(len(p['images']) for p in all_projects)
         print(f"✅ Total images loaded: {total_images}")
         print(f"   └─ {gallery_count} projects will appear in gallery")
         
-        # Fetch info page content
         try:
             info_rows = fetch_sheet_data(SHEET_ID, INFO_RANGE, API_KEY)
             info_data = parse_info(info_rows)
@@ -333,22 +322,18 @@ def main():
         traceback.print_exc()
         return
     
-    # Generate pages
     print("📝 Generating HTML pages...")
     
-    # Gallery page
     gallery_html = generate_gallery_page(all_projects)
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(gallery_html)
     print("✅ Generated index.html")
     
-    # Archive page
     archive_html = generate_archive_page(all_projects)
     with open('archive.html', 'w', encoding='utf-8') as f:
         f.write(archive_html)
     print("✅ Generated archive.html")
     
-    # Info page
     info_html = generate_info_page(info_data)
     with open('info.html', 'w', encoding='utf-8') as f:
         f.write(info_html)
