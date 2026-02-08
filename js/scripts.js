@@ -82,33 +82,41 @@ if (toggleButton) {
 // Gallery auto-scroll
 var galleryContainer = document.querySelector(".gallery-section .scroll-container");
 if (galleryContainer) {
-  var scrollSpeed = 0.5; // pixels per frame
+  var scrollSpeed = 1; // pixels per frame
   var scrollPosition = 0;
-  var maxScroll = galleryContainer.scrollWidth - galleryContainer.clientWidth;
   var direction = 1; // 1 for right, -1 for left
+  var isPaused = false;
   
   function autoScroll() {
-    scrollPosition += scrollSpeed * direction;
-    
-    // Reverse direction at ends
-    if (scrollPosition >= maxScroll) {
-      direction = -1;
-    } else if (scrollPosition <= 0) {
-      direction = 1;
+    if (!isPaused) {
+      scrollPosition += scrollSpeed * direction;
+      
+      var maxScroll = galleryContainer.scrollWidth - galleryContainer.clientWidth;
+      
+      // Reverse direction at ends
+      if (scrollPosition >= maxScroll && direction === 1) {
+        direction = -1;
+      } else if (scrollPosition <= 0 && direction === -1) {
+        direction = 1;
+      }
+      
+      galleryContainer.scrollLeft = scrollPosition;
     }
     
-    galleryContainer.scrollLeft = scrollPosition;
     requestAnimationFrame(autoScroll);
   }
   
-  autoScroll();
+  // Start auto-scroll after images load
+  window.addEventListener('load', function() {
+    setTimeout(autoScroll, 100);
+  });
   
   // Pause on hover
   galleryContainer.addEventListener('mouseenter', function() {
-    scrollSpeed = 0;
+    isPaused = true;
   });
   
   galleryContainer.addEventListener('mouseleave', function() {
-    scrollSpeed = 0.5;
+    isPaused = false;
   });
 }
