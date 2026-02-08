@@ -736,18 +736,62 @@ th:nth-child(5), td:nth-child(5) {
    ========================================================================== */
 
 footer {
+  position: fixed !important;
+  bottom: 2vh !important;
+  right: 2vw !important;
+  left: auto !important;
+  width: auto !important;
   text-align: right;
-  bottom: 0;
-  margin: 0px;
-  position: absolute;
-  font-size: 0.5em;
+  font-size: 0.7em;
   letter-spacing: 0.1em;
-  width: 100%;
-  right: 0;
-  flex-shrink: 0;
-  font-family: jap;
-  padding-bottom: 3vh;
-  padding-right: 5vw;
+  font-family: var(--primary-font);
+  z-index: 100;
+  margin: 0;
+}
+
+/* ==========================================================================
+   INFO PAGE
+   ========================================================================== */
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.info .bio {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.info .bio p {
+  margin: 0 0 2em 0;
+  font-size: 1.2em;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+}
+
+.info .bio p:first-child {
+  margin-bottom: 3em;
+}
+
+.info .contact {
+  margin-top: 2em;
+}
+
+.info .contact a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+}
+
+.info .contact a:hover {
+  color: var(--tertiary-color);
 }
 
 /* ==========================================================================
