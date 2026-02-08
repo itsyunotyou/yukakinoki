@@ -5,81 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive - yukakinoki</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/" class="logo">yukakinoki</a>
-            <button class="menu-toggle">expand_more</button>
-            <ul>
-                <li><a href="info.html">INFO</a></li>
-                <li><a href="index.html">GALLERY</a></li>
-                <li><a href="archive.html">ARCHIVE</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main class="archive">
-        <table class="archive-table">
-            <thead>
-                <tr>
-                    <th>DATE</th>
-                    <th>PROJECT</th>
-                    <th>CLIENT</th>
-                    <th>TASK</th>
-                </tr>
-            </thead>
-            <tbody>
-        <tr>
-            <td>2025</td>
-            <td>Art Direction</td>
-            <td>Mizuno MXR Space</td>
-            <td><a href="https://www.youtube.com/watch?v=Q3IbMZrDyHI" target="_blank">https://www.youtube.com/watch?v=Q3IbMZrDyHI</a></td>
-        </tr>
-        <tr>
-            <td>2025</td>
-            <td>Art Direction</td>
-            <td>Kaytranada - Space Invader</td>
-            <td><a href="https://youtu.be/jb2QPbQoZLI?si=Opi61fPVZ4I6LtFw" target="_blank">https://youtu.be/jb2QPbQoZLI?si=Opi61fPVZ4I6LtFw</a></td>
-        </tr>
-        <tr>
-            <td>2025</td>
-            <td>Web Design</td>
-            <td>c-studios</td>
-            <td><a href="https://c-studios.co.uk/" target="_blank">https://c-studios.co.uk/</a></td>
-        </tr>
-        <tr>
-            <td>2025</td>
-            <td>Set Design Assistant</td>
-            <td>Freelance</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>2024</td>
-            <td>Web Design</td>
-            <td>putotoy</td>
-            <td><a href="https://putotoy.com/" target="_blank">https://putotoy.com/</a></td>
-        </tr>
-        <tr>
-            <td>2024</td>
-            <td>Art Direction</td>
-            <td>PUSH</td>
-            <td>Assisted set design for JCK Music Video, Art direction for Casetify Collection.</td>
-        </tr>
-        <tr>
-            <td>2023</td>
-            <td>Web & Motion Design</td>
-            <td>Haco Hair Salon</td>
-            <td>Designed websites, business card, and social media assets.</td>
-        </tr>
-            </tbody>
-        </table>
-        
-        <div class="archive-images">
-
+    <nav>
+        <ul>
+            <li class="aboutbutton"><a href="info.html">INFO</a></li>
+            <li class="gallerybutton"><a href="index.html">GALLERY</a></li>
+            <li class="listbutton"><a href="archive.html">ARCHIVE</a></li>
+        </ul>
+    </nav>
+    
+    <div class="archive-container">
+        <div class="table-container">
+            <div class="table-header">
+                <button id="toggleTable" class="collapse-button">-</button>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>PROJECT</th>
+                        <th>CLIENT</th>
+                        <th>TASK</th>
+                    </tr>
+                </thead>
+                <tbody>
+            <tr data-tab="project-0">
+                <td>2025</td>
+                <td>Art Direction</td>
+                <td>Mizuno MXR Space</td>
+                <td><a href="https://www.youtube.com/watch?v=Q3IbMZrDyHI" target="_blank">https://www.youtube.com/watch?v=Q3IbMZrDyHI</a></td>
+            </tr>
+            <tr data-tab="project-1">
+                <td>2025</td>
+                <td>Art Direction</td>
+                <td>Kaytranada - Space Invader</td>
+                <td><a href="https://youtu.be/jb2QPbQoZLI?si=Opi61fPVZ4I6LtFw" target="_blank">https://youtu.be/jb2QPbQoZLI?si=Opi61fPVZ4I6LtFw</a></td>
+            </tr>
+            <tr data-tab="project-2">
+                <td>2025</td>
+                <td>Web Design</td>
+                <td>c-studios</td>
+                <td><a href="https://c-studios.co.uk/" target="_blank">https://c-studios.co.uk/</a></td>
+            </tr>
+            <tr data-tab="project-3">
+                <td>2025</td>
+                <td>Set Design Assistant</td>
+                <td>Freelance</td>
+                <td></td>
+            </tr>
+            <tr data-tab="project-4">
+                <td>2024</td>
+                <td>Web Design</td>
+                <td>putotoy</td>
+                <td><a href="https://putotoy.com/" target="_blank">https://putotoy.com/</a></td>
+            </tr>
+            <tr data-tab="project-5">
+                <td>2024</td>
+                <td>Art Direction</td>
+                <td>PUSH</td>
+                <td>Assisted set design for JCK Music Video, Art direction for Casetify Collection.</td>
+            </tr>
+            <tr data-tab="project-6">
+                <td>2023</td>
+                <td>Web & Motion Design</td>
+                <td>Haco Hair Salon</td>
+                <td>Designed websites, business card, and social media assets.</td>
+            </tr>
+                </tbody>
+            </table>
         </div>
-    </main>
+        
+        <div class="sample">
+        <div id="project-0" class="project-content"></div>
+        <div id="project-1" class="project-content"></div>
+        <div id="project-2" class="project-content"></div>
+        <div id="project-3" class="project-content"></div>
+        <div id="project-4" class="project-content"></div>
+        <div id="project-5" class="project-content"></div>
+        <div id="project-6" class="project-content"></div>
+        </div>
+    </div>
+    
     <footer>
         <p>Copyright © 2026, yukakinoki.com</p>
     </footer>
+    
+    <script src="js/archive.js"></script>
 </body>
 </html>
