@@ -80,24 +80,38 @@ if (toggleButton) {
 }
 
 // Gallery auto-scroll
+console.log("Looking for gallery container...");
 var galleryContainer = document.querySelector(".gallery-section .scroll-container");
+console.log("Gallery container found:", galleryContainer);
+
 if (galleryContainer) {
   var scrollSpeed = 1; // pixels per frame
   var scrollPosition = 0;
   var direction = 1; // 1 for right, -1 for left
   var isPaused = false;
+  var isStarted = false;
   
   function autoScroll() {
-    if (!isPaused) {
+    if (!isPaused && isStarted) {
       scrollPosition += scrollSpeed * direction;
       
       var maxScroll = galleryContainer.scrollWidth - galleryContainer.clientWidth;
       
+      // Debug
+      if (!window.debugLogged) {
+        console.log("Scroll width:", galleryContainer.scrollWidth);
+        console.log("Client width:", galleryContainer.clientWidth);
+        console.log("Max scroll:", maxScroll);
+        window.debugLogged = true;
+      }
+      
       // Reverse direction at ends
       if (scrollPosition >= maxScroll && direction === 1) {
         direction = -1;
+        console.log("Reversing to left");
       } else if (scrollPosition <= 0 && direction === -1) {
         direction = 1;
+        console.log("Reversing to right");
       }
       
       galleryContainer.scrollLeft = scrollPosition;
@@ -108,15 +122,24 @@ if (galleryContainer) {
   
   // Start auto-scroll after images load
   window.addEventListener('load', function() {
-    setTimeout(autoScroll, 100);
+    console.log("Page loaded, starting auto-scroll in 500ms...");
+    setTimeout(function() {
+      isStarted = true;
+      console.log("Auto-scroll started!");
+      autoScroll();
+    }, 500);
   });
   
   // Pause on hover
   galleryContainer.addEventListener('mouseenter', function() {
+    console.log("Paused");
     isPaused = true;
   });
   
   galleryContainer.addEventListener('mouseleave', function() {
+    console.log("Resumed");
     isPaused = false;
   });
+} else {
+  console.log("Gallery container not found!");
 }
