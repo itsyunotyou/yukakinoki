@@ -1,8 +1,8 @@
+// Interactive Archive Table
 // Get all table rows within a table
 var tableRows = document.querySelectorAll("table tbody tr");
 var tableContainer = document.querySelector(".table-container");
 var toggleButton = document.getElementById("toggleTable");
-
 
 // Function to handle row click
 function handleRowClick(row) {
@@ -10,24 +10,27 @@ function handleRowClick(row) {
   tableRows.forEach(function(row) {
     row.classList.remove('selected');
   });
-
+  
   // Add 'selected' class to the clicked row
   row.classList.add('selected');
-
+  
   // Get the value of the 'data-tab' attribute of the clicked row
-  var hrefValue = row.getAttribute("data-tab");
-
+  var projectId = row.getAttribute("data-tab");
+  
   // Get the element with the corresponding id
-  var targetElement = document.getElementById(hrefValue);
-
-  // Hide siblings and fade in the target element
-  Array.from(targetElement.parentNode.children).forEach(function(sibling) {
-    if (sibling !== targetElement) {
-      sibling.style.display = "none";
-    }
+  var targetElement = document.getElementById(projectId);
+  
+  if (!targetElement) return;
+  
+  // Hide all project content sections
+  var allProjects = document.querySelectorAll(".project-content");
+  allProjects.forEach(function(project) {
+    project.style.display = "none";
   });
+  
+  // Show the target element
   targetElement.style.display = "flex";
-
+  
   // Fade-in effect with opacity
   targetElement.style.opacity = 0;
   var fadeInInterval = setInterval(function() {
@@ -36,7 +39,7 @@ function handleRowClick(row) {
     } else {
       clearInterval(fadeInInterval);
     }
-  }, 100);
+  }, 50);
 }
 
 // Attach click event listener to each table row
@@ -46,25 +49,25 @@ tableRows.forEach(function(row) {
   });
 });
 
-// Display one data tab by default
+// Display first project by default
 window.addEventListener('DOMContentLoaded', (event) => {
-  var defaultRow = document.querySelector("table tr.push");
-  if (defaultRow) {
-    handleRowClick(defaultRow);
+  if (tableRows.length > 0) {
+    handleRowClick(tableRows[0]); // Click first row by default
   }
 });
 
-
-  // Toggle table collapse/expand
+// Toggle table collapse/expand
+if (toggleButton) {
   toggleButton.addEventListener("click", function() {
-    var selectedRow = document.querySelector("table tbody tr.selected");
     if (tableContainer.classList.contains("collapsed")) {
+      // Expand
       tableContainer.classList.remove("collapsed");
       tableRows.forEach(function(row) {
         row.style.display = "";
       });
       toggleButton.textContent = "-";
     } else {
+      // Collapse
       tableContainer.classList.add("collapsed");
       tableRows.forEach(function(row) {
         if (!row.classList.contains('selected')) {
@@ -74,3 +77,4 @@ window.addEventListener('DOMContentLoaded', (event) => {
       toggleButton.textContent = "+";
     }
   });
+}
