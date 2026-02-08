@@ -4,118 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yukakinoki</title>
-
-
-    <!-- Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&display=swap" rel="stylesheet">
-
-    <!-- Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
-
-
-
-                <!-- Navbar -->
-                <nav class="navbar navbar-expand-lg mynav px-3">
-                    <div class="container-fluid px-0">
-                        <a class="navbar-brand" href="/">yukakinoki</a>
-                        <div class="container-button">
-                            <button 
-                            type="button" 
-                            class="navbar-toggler" 
-                            data-bs-toggle="collapse" 
-                            data-bs-target="#navbarSupportedContent" 
-                            aria-controls="#navbarSupportedContent" 
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-            
-                            <span class="material-symbols-outlined">expand_more</span>
-            
-                            </button>
-                            <div class="no-padding">
-                                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                    <ul class="navbar-nav ms-auto navbar-right px-0">
-        
-        
-                                    <li class="nav-item">
-                                        <a class="nav-link active"
-                                            href="info.html"
-                                            aria-current="page">INFO</a>
-                                    </li>
-        
-                                    <li class = "nav-item">
-                                        <a class="nav-link" 
-                                            href="index.html"
-                                            >GALLERY</a>
-                                    </li>
-        
-                                    <li class="nav-item">
-                                        <a class="nav-link" 
-                                            href="archive.html">ARCHIVE</a>
-                                    </li>
-        
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-                <!-- End Navbar -->
-
-        <main class="archive-container px-3">
-
-
-            <!-- About -->
-            <section class="about_section">
-                <div class="d-flex mx-auto flex-column align-items-end vh-100 justify-content-center">
-                    <p>
-                        Yu Kakinoki is a billingual interdisciplinary designer, currently based in Tokyo. Have developed a distinct eye for aesthetics by growing up in California, Japan, Hong Kong, and London. The goal is to push the boundaries of storytelling through spatial design - whether it be a tangible room, a digital space, or both. This website was built through GitHub Pages with self-learnt HTML, CSS, JavaScript, and Bootstrap. My dissertation title was 'To what extent is the aura relevant to a work of art in the age of biocybernetic simulation?'
-                    </p>
-                    <br>
-                    <p>
-                        柿木優は、現在東京を拠点に活動している学際的なバイリンガルデザイナーです。 カリフォルニア、香港、ロンドンと日本で生まれ育ち、独特なセンスを構築しました。ストーリーテリングの未来をデジタル、そして現実的な空間デザインを交えて追求しています。 事実上何でも独学で学べる世界に住んで幸せです！ このサイトは、HTML、CSS、JavaScript、および Bootstrapを自己学習し、GitHubページを通して構築しました。
-                    </p>
-                    <br>
-                    <p class="text-start"><a class='contact-link h4' href = "mailto: yukakinoki@gmail.com">contact</a></p>
-                
-                </div>
-        
-            </section>
-            <!-- End About -->
-  
-    
-        </main>
-
-
-
-
-
-    <!-- Footer -->
-    <footer class="fixed-bottom mb-3">
-        <div class="container text-center">
-            Copyright &copy; 2024, yukakinoki.com
-        </div>
+    <header>
+        <nav>
+            <a href="/" class="logo">yukakinoki</a>
+            <button class="menu-toggle">expand_more</button>
+            <ul>
+                <li><a href="info.html">INFO</a></li>
+                <li><a href="index.html">GALLERY</a></li>
+                <li><a href="archive.html">ARCHIVE</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="info">
+        <section class="bio">
+            <p>Yu Kakinoki is a billingual art director, currently based in Tokyo. Have developed a distinct eye for aesthetics by growing up in California, Japan, Hong Kong, and London. The goal is to push the boundaries of storytelling through spatial design - whether it be a tangible room, a digital space, or both. This website was built through GitHub Pages with self-learnt HTML, CSS, JavaScript, and Bootstrap. Dissertation title was 'To what extent is the aura relevant to a work of art in the age of biocybernetic simulation?'</p>
+            <p>柿木優は、現在東京を拠点に活動している学際的なバイリンガルデザイナーです。 カリフォルニア、香港、ロンドンと日本で生まれ育ち、独特なセンスを構築しました。ストーリーテリングの未来をデジタル、そして現実的な空間デザインを交えて追求しています。 事実上何でも独学で学べる世界に住んで幸せです！ このサイトは、HTML、CSS、JavaScript、および Bootstrapを自己学習し、GitHubページを通して構築しました。</p>
+        </section>
+        <section class="contact">
+            <a href="mailto:yukakinoki@gmail.com">contact</a>
+        </section>
+    </main>
+    <footer>
+        <p>Copyright © 2026, yukakinoki.com</p>
     </footer>
-    <!-- End Footer -->
-      
-    </body>
-  
-    <!-- Bootstrap JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
-    <!-- Custom JS-->
-    <script src="js/scripts.js"></script>
+</body>
 </html>
-    
-              
-
-  
