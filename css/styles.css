@@ -110,6 +110,11 @@ nav ul li a {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 300;
+  color: var(--text-gray);
+}
+
+nav ul li a:hover {
+  color: var(--secondary-color);
 }
 
 /* Active page styling */
