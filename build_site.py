@@ -200,8 +200,11 @@ def generate_gallery_page(projects):
 def generate_archive_page(projects):
     """Generate the archive page with table and images"""
     
+    # Sort by date (most recent first), then by order
+    sorted_projects = sorted(projects, key=lambda x: (x['date'], x['order']), reverse=True)
+    
     table_rows = []
-    for project in projects:
+    for project in sorted_projects:
         task = project['task']
         if 'https://' in task or 'http://' in task:
             import re
@@ -215,7 +218,9 @@ def generate_archive_page(projects):
         </tr>''')
     
     table_html = '\n'.join(table_rows)
-    images_html = '\n'.join([generate_archive_project_html(p) for p in projects if len(p['images']) > 0])
+    
+    # Generate images below table (also sorted by date)
+    images_html = '\n'.join([generate_archive_project_html(p) for p in sorted_projects if len(p['images']) > 0])
     css_links = get_css_links()
     
     html = f'''<!DOCTYPE html>
