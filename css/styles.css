@@ -105,9 +105,13 @@ html, body {
   user-select: none; 
   overflow: hidden;
   scroll-behavior: none;
-  padding: 1vh 2vw;
 }
 
+body {
+  font-family: jap;
+  letter-spacing: 0.1em;
+  padding: 1vh 2vw;
+}
 
 h1, h2, h3, h4, h5, h6, p, a, .table>thead, th {
   margin: 0;
@@ -743,6 +747,43 @@ footer {
   font-family: var(--primary-font);
   z-index: 100;
   margin: 0;
+}
+
+/* ==========================================================================
+   ARCHIVE PAGE - INTERACTIVE
+   ========================================================================== */
+
+.archive-container {
+  margin-top: 35px;
+}
+
+.table-container {
+  margin: 2%;
+}
+
+.table-container.collapsed tbody tr:not(.selected) {
+  display: none;
+}
+
+.project-content {
+  display: none;
+  flex: 1;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  height: 65vh;
+}
+
+.project-content .scroll-container {
+  display: flex;
+  height: 90vh;
+  overflow: scroll;
+  white-space: nowrap;
+  scrollbar-width: none;
+  gap: 1vw;
+}
+
+.project-content .scroll-container img {
+  height: 70%;
 }
 
 /* ==========================================================================
