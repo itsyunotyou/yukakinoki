@@ -37,15 +37,19 @@ Create a sheet called "Projects" with these columns (Row 1 headers):
 | IG Story Ad | video | images/haco/igstoryad.mp4 | images/haco/igstoryad.png | Instagram story ad | gallery | 4 | yes |
 | Gogo Video | video | images/haco/gogo.mp4 | images/haco/gogo.png | Gogo campaign | gallery | 5 | yes |
 
-### Sheet 2: "Config" (Optional)
+### Sheet 2: "Info"
 
-For site-wide settings like footer text, contact info, etc.
+For your info/about page content:
 
 | A | B |
 |---|---|
 | Key | Value |
-| site_title | yukakinoki |
-| footer_text | Copyright © 2024, yukakinoki.com |
+| Bio English | Yu Kakinoki is a billingual interdisciplinary designer, currently based in Tokyo... |
+| Bio Japanese | 柿木優は、現在東京を拠点に活動している学際的なバイリンガルデザイナーです... |
+| Contact Email | yukakinoki@gmail.com |
+| Contact Text | contact |
+
+**Note:** The bio text can be multiple paragraphs. Just put the entire text in the cell.
 
 ## Step 3: Make Sheet Public (Read-Only)
 
