@@ -85,7 +85,7 @@ nav {
   left: 0;
   right: 0;
   padding: 1vh 1.5vw;
-  background: var(--bg-white);
+  background: transparent;
   z-index: 100;
 }
 
@@ -223,29 +223,15 @@ tbody td:nth-child(4) { width: 50%; }
   height: 100vh;
   overflow: hidden;
   padding: 0;
-  animation: scroll-loop 60s linear infinite;
-}
-
-@keyframes scroll-loop {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.gallery-section .scroll-container:hover {
-  animation-play-state: paused;
+  will-change: transform;
 }
 
 .gallery-section .scroll-container img {
   height: 100vh;
   width: auto;
   flex-shrink: 0;
+  object-fit: cover;
+  display: block;
 }
 
 /* Archive specific - desktop only */
@@ -282,13 +268,15 @@ tbody td:nth-child(4) { width: 50%; }
   .project-content .scroll-container {
     height: 100%;
     gap: 0;
-    animation: scroll-loop 60s linear infinite;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   
   .project-content .scroll-container img {
     height: 100%;
     width: auto;
     flex-shrink: 0;
+    object-fit: contain;
   }
 }
 
