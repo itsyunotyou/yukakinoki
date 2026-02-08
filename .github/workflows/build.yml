@@ -1,0 +1,48 @@
+name: Build Site from Google Sheets
+
+on:
+  # Run when manually triggered
+  workflow_dispatch:
+  
+  # Run on schedule (every 6 hours to check for sheet updates)
+  schedule:
+    - cron: '0 */6 * * *'
+  
+  # Run on push to main (for testing)
+  push:
+    branches:
+      - main
+    paths:
+      - 'build_site.py'
+      - '.github/workflows/build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        pip install requests
+        
+    - name: Build site from Google Sheets
+      env:
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      run: |
+        python build_site.py
+        
+    - name: Commit and push if changed
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+        git add -A
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update from Google Sheets [skip ci]" && git push)
