@@ -28,7 +28,7 @@
    ========================================================================== */
 
 html {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 body {
@@ -115,15 +115,9 @@ table {
   margin-top: 2rem;
 }
 
-thead th {
-  text-align: left;
-  padding: 1.2rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-gray);
-  border-bottom: 2px solid var(--primary-color);
+/* Hide table headers */
+thead {
+  display: none;
 }
 
 tbody td {
@@ -131,6 +125,14 @@ tbody td {
   font-size: 1rem;
   font-weight: 300;
   border-bottom: 1px solid var(--border-color);
+}
+
+/* Make date, role, project uppercase (not description) */
+tbody td:nth-child(1),
+tbody td:nth-child(2),
+tbody td:nth-child(3) {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 tbody tr {
@@ -152,10 +154,10 @@ tbody tr.selected a {
 }
 
 /* Column widths */
-thead th:nth-child(1), tbody td:nth-child(1) { width: 10%; }
-thead th:nth-child(2), tbody td:nth-child(2) { width: 20%; }
-thead th:nth-child(3), tbody td:nth-child(3) { width: 20%; }
-thead th:nth-child(4), tbody td:nth-child(4) { width: 50%; }
+tbody td:nth-child(1) { width: 10%; }
+tbody td:nth-child(2) { width: 20%; }
+tbody td:nth-child(3) { width: 20%; }
+tbody td:nth-child(4) { width: 50%; }
 
 .table-header {
   display: flex;
@@ -252,16 +254,17 @@ thead th:nth-child(4), tbody td:nth-child(4) { width: 50%; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 80vh;
   padding: 4rem 2rem;
-  text-align: center;
+  text-align: left;
   margin-top: 10vh;
+  max-width: 800px;
 }
 
 .info .bio {
-  max-width: 800px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
 }
 
 .info .bio p {
@@ -270,6 +273,13 @@ thead th:nth-child(4), tbody td:nth-child(4) { width: 50%; }
   margin: 0 0 3em 0;
   font-weight: 300;
   letter-spacing: 0.01em;
+}
+
+/* Fix Japanese font weight to match English */
+.info .bio p:last-of-type {
+  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  font-weight: 200;
+  letter-spacing: 0.05em;
 }
 
 .info .bio p:first-child {
@@ -340,20 +350,15 @@ footer {
   }
   
   /* Mobile table */
-  thead th,
   tbody td {
     padding: 0.8rem 0.5rem;
     font-size: 0.85rem;
   }
   
-  thead th {
-    font-size: 0.75rem;
-  }
-  
-  thead th:nth-child(1), tbody td:nth-child(1) { width: 15%; }
-  thead th:nth-child(2), tbody td:nth-child(2) { width: 25%; }
-  thead th:nth-child(3), tbody td:nth-child(3) { width: 20%; }
-  thead th:nth-child(4), tbody td:nth-child(4) { width: 40%; }
+  tbody td:nth-child(1) { width: 15%; }
+  tbody td:nth-child(2) { width: 25%; }
+  tbody td:nth-child(3) { width: 20%; }
+  tbody td:nth-child(4) { width: 40%; }
   
   /* Mobile images */
   .scroll-container {
