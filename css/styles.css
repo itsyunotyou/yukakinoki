@@ -261,13 +261,18 @@ tbody td:nth-child(4) { width: 50%; }
     overflow: hidden;
   }
   
+  /* Remove padding on archive page */
+  body:has(.archive-container) {
+    padding: 0;
+  }
+  
   .archive-container {
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    margin-top: 0;
-    padding-top: 6vh;
+    margin: 0;
+    padding: 6vh 0 0 0;
   }
   
   .table-container {
@@ -275,20 +280,46 @@ tbody td:nth-child(4) { width: 50%; }
     overflow-y: auto;
     max-height: 25vh;
     scrollbar-width: none;
+    padding: 0;
+    margin: 0;
   }
   
   .table-container::-webkit-scrollbar {
     display: none;
   }
   
+  /* Make table full width edge-to-edge */
+  table {
+    width: 100%;
+    margin: 0;
+  }
+  
+  thead th,
+  tbody td {
+    padding: 0.6rem 2vw;
+  }
+  
+  thead th:first-child,
+  tbody td:first-child {
+    padding-left: 2vw;
+  }
+  
+  thead th:last-child,
+  tbody td:last-child {
+    padding-right: 2vw;
+  }
+  
   .sample {
     flex: 1;
     overflow: hidden;
-    margin-top: 0;
+    margin: 0;
+    padding: 0;
   }
   
   .project-content {
     height: 100%;
+    padding: 0;
+    margin: 0;
   }
   
   .project-content .scroll-container {
@@ -297,6 +328,8 @@ tbody td:nth-child(4) { width: 50%; }
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
+    padding: 0;
+    margin: 0;
   }
   
   .project-content .scroll-container::-webkit-scrollbar {
@@ -308,11 +341,6 @@ tbody td:nth-child(4) { width: 50%; }
     width: auto;
     flex-shrink: 0;
     object-fit: contain;
-  }
-  
-  /* Reduce table row padding on desktop */
-  tbody td {
-    padding: 0.6rem 1rem;
   }
 }
 
