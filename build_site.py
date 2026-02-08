@@ -165,7 +165,7 @@ def generate_gallery_page(projects):
     <nav>
         <ul>
             <li class="aboutbutton"><a href="info.html">INFO</a></li>
-            <li class="gallerybutton"><a href="index.html">GALLERY</a></li>
+            <li class="gallerybutton active"><a href="index.html">GALLERY</a></li>
             <li class="listbutton"><a href="archive.html">ARCHIVE</a></li>
         </ul>
     </nav>
@@ -190,8 +190,8 @@ def generate_gallery_page(projects):
 def generate_archive_page(projects):
     """Generate INTERACTIVE archive page with clickable table rows"""
     
-    # Sort by date (most recent first), then by order
-    sorted_projects = sorted(projects, key=lambda x: (x['date'], x['order']), reverse=True)
+    # Sort by date (most recent first)
+    sorted_projects = sorted(projects, key=lambda x: x['date'], reverse=True)
     
     # Generate table rows with data-tab attributes
     table_rows = []
@@ -251,7 +251,7 @@ def generate_archive_page(projects):
         <ul>
             <li class="aboutbutton"><a href="info.html">INFO</a></li>
             <li class="gallerybutton"><a href="index.html">GALLERY</a></li>
-            <li class="listbutton"><a href="archive.html">ARCHIVE</a></li>
+            <li class="listbutton active"><a href="archive.html">ARCHIVE</a></li>
         </ul>
     </nav>
     
@@ -314,7 +314,7 @@ def generate_info_page(info_data):
 <body>
     <nav>
         <ul>
-            <li class="aboutbutton"><a href="info.html">INFO</a></li>
+            <li class="aboutbutton active"><a href="info.html">INFO</a></li>
             <li class="gallerybutton"><a href="index.html">GALLERY</a></li>
             <li class="listbutton"><a href="archive.html">ARCHIVE</a></li>
         </ul>
