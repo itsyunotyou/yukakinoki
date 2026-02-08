@@ -78,3 +78,37 @@ if (toggleButton) {
     }
   });
 }
+
+// Gallery auto-scroll
+var galleryContainer = document.querySelector(".gallery-section .scroll-container");
+if (galleryContainer) {
+  var scrollSpeed = 0.5; // pixels per frame
+  var scrollPosition = 0;
+  var maxScroll = galleryContainer.scrollWidth - galleryContainer.clientWidth;
+  var direction = 1; // 1 for right, -1 for left
+  
+  function autoScroll() {
+    scrollPosition += scrollSpeed * direction;
+    
+    // Reverse direction at ends
+    if (scrollPosition >= maxScroll) {
+      direction = -1;
+    } else if (scrollPosition <= 0) {
+      direction = 1;
+    }
+    
+    galleryContainer.scrollLeft = scrollPosition;
+    requestAnimationFrame(autoScroll);
+  }
+  
+  autoScroll();
+  
+  // Pause on hover
+  galleryContainer.addEventListener('mouseenter', function() {
+    scrollSpeed = 0;
+  });
+  
+  galleryContainer.addEventListener('mouseleave', function() {
+    scrollSpeed = 0.5;
+  });
+}
