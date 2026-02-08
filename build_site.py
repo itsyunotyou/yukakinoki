@@ -186,6 +186,8 @@ def generate_gallery_page(projects):
     <footer>
         <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
     </footer>
+      <script src="js/scripts.js" defer></script>
+
 </body>
 </html>'''
     
@@ -289,7 +291,8 @@ def generate_archive_page(projects):
         <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
     </footer>
     
-    <script src="js/scripts.js"></script>
+      <script src="js/scripts.js" defer></script>
+
 </body>
 </html>'''
     
