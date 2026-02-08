@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Build script for yukakinoki.com
+Build script for yukakinoki.com - INTERACTIVE VERSION
 Fetches data from Google Sheets and images from Google Drive folders
+Generates interactive archive with clickable table rows
 """
 
 import os
@@ -112,6 +113,7 @@ def get_css_links():
     """Generate CSS links - uses your existing styles.css"""
     return '<link rel="stylesheet" href="css/styles.css">'
 
+
 def generate_gallery_project_html(project):
     """Generate HTML for a gallery project with multiple images"""
     if not project['images']:
@@ -126,41 +128,6 @@ def generate_gallery_project_html(project):
             html_parts.append(f'                <img src="{img["url"]}" alt="{project["description"]}">')
     
     return '\n'.join(html_parts)
-
-def generate_archive_project_html(project):
-    """Generate HTML for archive project images (below table)"""
-    if not project['images']:
-        return ''
-    
-    html_parts = []
-    for img in project['images']:
-        if project['type'] == 'video':
-            thumbnail = img.get('thumbnail', img['url'].replace('.mp4', '.png'))
-            html_parts.append(f'                <a href="{img["url"]}"><img src="{thumbnail}" alt="{project["description"]}"></a>')
-        else:
-            html_parts.append(f'                <img src="{img["url"]}" alt="{project["description"]}">')
-    
-    return '\n'.join(html_parts)
-
-def generate_nav():
-    """Generate navigation HTML"""
-    return '''    <header>
-        <nav>
-            <a href="/" class="logo">yukakinoki</a>
-            <button class="menu-toggle">expand_more</button>
-            <ul>
-                <li><a href="info.html">INFO</a></li>
-                <li><a href="index.html">GALLERY</a></li>
-                <li><a href="archive.html">ARCHIVE</a></li>
-            </ul>
-        </nav>
-    </header>'''
-
-def generate_footer():
-    """Generate footer HTML"""
-    return f'''    <footer>
-        <p>Copyright © {datetime.now().year}, yukakinoki.com</p>
-    </footer>'''
 
 def generate_gallery_page(projects):
     """Generate the gallery/index page"""
@@ -203,30 +170,55 @@ def generate_gallery_page(projects):
     
     return html
 
+
 def generate_archive_page(projects):
-    """Generate the archive page with table and images"""
+    """Generate INTERACTIVE archive page with clickable table rows"""
     
     # Sort by date (most recent first), then by order
     sorted_projects = sorted(projects, key=lambda x: (x['date'], x['order']), reverse=True)
     
+    # Generate table rows with data-tab attributes
     table_rows = []
-    for project in sorted_projects:
+    content_sections = []
+    
+    for i, project in enumerate(sorted_projects):
         task = project['task']
         if 'https://' in task or 'http://' in task:
             import re
             task = re.sub(r'(https?://[^\s]+)', r'<a href="\1" target="_blank">\1</a>', task)
         
-        table_rows.append(f'''        <tr>
-            <td>{project['date']}</td>
-            <td>{project['project_name']}</td>
-            <td>{project['client']}</td>
-            <td>{task}</td>
-        </tr>''')
+        # Create unique ID for each project
+        project_id = f"project-{i}"
+        
+        # Add table row with data-tab
+        table_rows.append(f'''            <tr data-tab="{project_id}">
+                <td>{project['date']}</td>
+                <td>{project['project_name']}</td>
+                <td>{project['client']}</td>
+                <td>{task}</td>
+            </tr>''')
+        
+        # Generate content section for this project
+        if len(project['images']) > 0:
+            images_html = []
+            for img in project['images']:
+                if project['type'] == 'video':
+                    thumbnail = img.get('thumbnail', img['url'].replace('.mp4', '.png'))
+                    images_html.append(f'                    <a href="{img["url"]}"><img src="{thumbnail}" alt="{project["description"]}"></a>')
+                else:
+                    images_html.append(f'                    <img src="{img["url"]}" alt="{project["description"]}">')
+            
+            content_sections.append(f'''        <div id="{project_id}" class="project-content">
+            <div class="scroll-container">
+{chr(10).join(images_html)}
+            </div>
+        </div>''')
+        else:
+            # No images - empty content section
+            content_sections.append(f'''        <div id="{project_id}" class="project-content"></div>''')
     
     table_html = '\n'.join(table_rows)
-    
-    # Generate images below table (also sorted by date)
-    images_html = '\n'.join([generate_archive_project_html(p) for p in sorted_projects if len(p['images']) > 0])
+    content_html = '\n'.join(content_sections)
     css_links = get_css_links()
     
     html = f'''<!DOCTYPE html>
@@ -248,34 +240,40 @@ def generate_archive_page(projects):
     </nav>
     
     <div class="archive-container">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>DATE</th>
-                    <th>PROJECT</th>
-                    <th>CLIENT</th>
-                    <th>TASK</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="table-container">
+            <div class="table-header">
+                <button id="toggleTable" class="collapse-button">-</button>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>PROJECT</th>
+                        <th>CLIENT</th>
+                        <th>TASK</th>
+                    </tr>
+                </thead>
+                <tbody>
 {table_html}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
         
         <div class="sample">
-            <div class="scroll-container">
-{images_html}
-            </div>
+{content_html}
         </div>
     </div>
     
     <footer>
         <p>Copyright © {datetime.now().year}, yukakinoki.com</p>
     </footer>
+    
+    <script src="js/archive.js"></script>
 </body>
 </html>'''
     
     return html
+
 
 def generate_info_page(info_data):
     """Generate the info page"""
@@ -367,7 +365,7 @@ def main():
     archive_html = generate_archive_page(all_projects)
     with open('archive.html', 'w', encoding='utf-8') as f:
         f.write(archive_html)
-    print("✅ Generated archive.html")
+    print("✅ Generated archive.html (interactive)")
     
     info_html = generate_info_page(info_data)
     with open('info.html', 'w', encoding='utf-8') as f:
