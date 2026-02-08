@@ -1,5 +1,48 @@
+/* ==========================================================================
+   COMBINED STYLES.CSS - yukakinoki.com
+   Merged from: styles.css, pcc.css, list.css, about.css, eterna.css
+   ========================================================================== */
+
+/* Font Imports */
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css');
+
+/* Custom Font Faces */
+@font-face {
+  font-family: 'cursive3';
+  src: url('cursive/Cursive.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'cloud';
+  src: url('cloude/Cloude_Regular_1.02.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'jap';
+  src: url('japanese/ZenKakuGothicNew-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'jap';
+  src: url('japanese/ZenKakuGothicNew-Bold.ttf');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   ROOT & RESET
+   ========================================================================== */
 
 *,
 *::before,
@@ -13,7 +56,7 @@
   outline: none;
 }
 
-:root{
+:root {
   /* Background Color*/
   --bg-white: #ffff;
 
@@ -28,17 +71,29 @@
   --anchor-color: #a9a9a900;
 
   /* Font Family */
-
   --primary-font: 'Roboto Mono', monospace;
   --secondary-font: 'Roboto Mono', monospace;
-
 }
 
-html, body{  
+:root * {
+  /* Pause the animation */
+  animation-play-state: paused;
+  /* Bind the animation to scroll */
+  animation-delay: calc(var(--scroll) * -1s);
+  /* These last 2 properites clean up overshoot weirdness */
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+
+/* ==========================================================================
+   BASE STYLES
+   ========================================================================== */
+
+html, body {  
   font-family: var(--primary-font);
   color: var(--primary-text);
   font-size: 10px;
-  margin:0;
+  margin: 0;
   padding: 0;
   height: 100vh;
   width: 100vw;
@@ -52,24 +107,57 @@ html, body{
   scroll-behavior: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-a,
-.table>thead,
-th{
+body {
+  font-family: jap;
+  letter-spacing: 0.1em;
+  padding: 1vh 2vw;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, .table>thead, th {
   margin: 0;
   letter-spacing: .1rem !important;
   font-weight: normal !important;
 }
 
-.container .row {
-  height: 100vh;
+h2, h4, p {
+  margin: 0px;
 }
+
+h4 {
+  font-size: 1em;
+  margin: 0;
+}
+
+strong {
+  font-size: 0.9em;
+  letter-spacing: 0.1em;
+  line-height: 1.1em;
+}
+
+p {
+  font-size: 0.8em;
+  margin: 0;
+  margin-top: -2em;
+}
+
+time {
+  display: block;
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.text-box time {
+  font-size: 0.8em;
+}
+
+main {
+  max-width: 90vw;
+}
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
 
 .material-symbols-outlined {
   font-variation-settings:
@@ -77,38 +165,36 @@ th{
   'wght' 400,
   'GRAD' 0,
   'opsz' 24;
-
   float: right;
   justify-self: right;
 }
 
-.nav-link{
+.nav-link {
   text-align: right;
 }
 
-.navbar>.container-fluid{
+.navbar > .container-fluid {
   align-items: flex-start !important;
 }
-.nav-link:hover{
+
+.nav-link:hover {
   color: var(--tertiary-color) !important;
 }
 
-
-.navbar-nav a.active{
+.navbar-nav a.active {
   color: var(--secondary-color) !important;
 }
 
-
-.contact-link{
+.contact-link {
   color: var(--tertiary-color) !important;
   text-decoration: none;
 }
 
-.contact-link:hover{
+.contact-link:hover {
   color: var(--secondary-color) !important;
 }
 
-.navbar-toggler{
+.navbar-toggler {
   margin: 0 !important;
   padding: 0 !important;
   float: right;
@@ -117,129 +203,342 @@ th{
   text-align: right !important;
 }
 
-.about_section{
-  width: 300px;
-  margin: 0 auto;
-}
 .navbar-toggler:focus {
   text-decoration: none;
   outline: 0;
   box-shadow: none !important;
   text-align: right !important;
-
 }
 
-.navbar{
+.navbar {
   position: absolute;
   z-index: 300;
   width: 100vw;
 }
-.container-button{
+
+.container-button {
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
 }
 
-.no-padding{
-
+.no-padding {
   text-align: right;
 }
 
-.index-section{
+nav {
+  align-items: center;
   position: fixed;
 }
 
-.archive-container{
+ul {
+  padding-inline-start: 0;
+  text-align: right;
+  padding-left: 0;
+}
+
+nav ul li {
+  list-style-type: none;
+  display: inline-block;
+  padding: 0;
+  right: 0;
+}
+
+nav ul p {
+  list-style-type: none;
+  display: inline-block;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9em;
+  float: left;
+}
+
+nav ul li a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+nav ul li a:hover {
+  color: red;
+  transition: .3s;
+}
+
+/* Navigation Button States */
+nav ul .listbutton a {
+  color: rgb(52, 194, 178);
+  text-decoration: none;
+  pointer-events: none;
+}
+
+nav ul .aboutbutton a {
+  color: rgb(52, 194, 178);
+  text-decoration: none;
+  pointer-events: none;
+}
+
+nav ul .aboutbutton a:hover, 
+nav ul .gallerybutton a:hover,
+nav ul .listbutton a:hover {
+  color: rgb(236, 122, 122);
+  transition: .3s;
+}
+
+nav ul .gallerybutton a,
+nav ul .listbutton a {
+  color: black;
+  text-decoration: none;
+}
+
+.aboutbutton, .listbutton, .gallerybutton {
+  font-size: 0.8em;
+}
+
+.homebutton {
+  font-size: 0.8em;
+}
+
+/* ==========================================================================
+   LAYOUT CONTAINERS
+   ========================================================================== */
+
+.container .row {
+  height: 100vh;
+}
+
+.index-section {
+  position: fixed;
+}
+
+.archive-container {
   margin-top: 35px;
 }
 
-.gallery-section{
+.gallery-section {
   margin-top: 35px;
 }
 
-.sample > div{
-  display:none;   
+#contents {
+  position: absolute;
 }
 
-  footer{
-    text-align: right;
-    bottom: 0; /* stick to bottom */
-    margin: 0px;
+.about_section {
+  width: 300px;
+  margin: 0 auto;
+}
 
-  }
+.description {
+  display: flex;
+  flex-direction: row;
+  gap: 5vw;
+  width: 100vw;
+  height: 100vh;
+  text-align: left;
+}
 
-.sample{
+.description div {
+  flex: 20%;
+}
+
+/* Main Container - Multiple Layouts */
+#main-container {
+  display: flex;
+  height: 85vh;
+  width: 96vw;
+  margin-top: 7.5vh;
+  margin-bottom: 7.5vh;
+  margin-right: 2vw;
+  align-items: center;
+}
+
+#left-content {
+  flex: 15vw;
+  width: 10vw;
+  margin: 0;
+  height: 85vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-y: none;
+  align-self: center;
+  padding: 2vw;
+  border: solid black 2px;
+}
+
+#main-content {
+  flex: 81vw;
+  display: flex;
+  height: 80vh;
+  justify-content: center;
+  align-items: center;
+  padding: 2vw;
+  overflow-x: scroll;
+}
+
+#right-content {
+  flex: 0 80vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  text-align: left;
+  justify-content: center;
+  padding: 20px;
+  gap: 10px;
+  display: inline-block;
+}
+
+/* Column Layout */
+.column {
+  float: left;
+  width: 50%;
+  height: 100%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.row2 {
+  position: relative;
+  margin-top: 5vh;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   SCROLLING & GALLERIES
+   ========================================================================== */
+
+.sample > div {
+  display: none;   
+}
+
+.sample {
   flex: 1;
   overflow-x: scroll;
   overflow-y: hidden;
   height: 65vh;
 }
-  
 
-.sample .scroll-container img{
+.sample .scroll-container img {
   height: 70%;
 }
 
+.scroll-container {
+  display: flex;
+  height: 90vh;
+  overflow: scroll;
+  white-space: nowrap;
+  scrollbar-width: none;
+  gap: 1vw;
+  -webkit-animation-name: move;
+  -webkit-animation-duration: 30s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: left;
+  -webkit-animation-timing-function: linear;
+}
 
-  .scroll-container {
-    display: flex;
-    height: 90vh;
-    overflow: scroll;
-    white-space: nowrap;
-    scrollbar-width: none;
-    gap: 1vw;
-    -webkit-animation-name: move;
-    -webkit-animation-duration: 30s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-direction: left;
-    -webkit-animation-timing-function: linear;
-  }
-  
 .scroll-container:hover {
-    -webkit-animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+}
+
+@-webkit-keyframes move {
+  0% {
+    margin-left: 0%;
   }
-  
-  @-webkit-keyframes move {
-    0% {
-      margin-left: 0%;
-    }
-    50% {
-      margin-left: -100%;
-    }
-
-    100% {
-      margin-left: 0%;
-    }
+  50% {
+    margin-left: -100%;
   }
-  
-  ::-webkit-scrollbar {
-    display: none;
+  100% {
+    margin-left: 0%;
   }
+}
 
+.scroll-container img {
+  height: 100%;
+}
 
+::-webkit-scrollbar {
+  display: none;
+}
 
+/* ==========================================================================
+   IMAGES & MEDIA
+   ========================================================================== */
 
-td{
+img {
+  height: auto;
+  max-width: 90%;
+}
+
+.videoInsert {
+  height: 100%;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+}
+
+.pdf {
+  height: 70vh;
+  border-radius: 20px;
+  object-fit: contain;
+}
+
+.eternapdf {
+  position: relative;
+}
+
+.eternapdf:hover {
+  cursor: url('logos/scroll.png'), pointer;
+}
+
+.eternapdf:active {
+  cursor: url('logos/scroll.png'), pointer;
+}
+
+.logos {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 10px;
+}
+
+.logos img {
+  max-width: 100%;
+  max-height: 30px;
+  height: auto;
+  width: auto;
+}
+
+/* ==========================================================================
+   TABLES
+   ========================================================================== */
+
+td {
   background-color: transparent !important;
-
 }
 
 .selected {
   background-color: var(--secondary-color) !important;
-
-
 }
 
-.table-hover>tbody>tr:hover {
+.table-hover > tbody > tr:hover {
   background-color: var(--anchor-color);
 }
 
-.selected td{
+.selected td {
   color: white;
 }
 
-.check_put{
+.check_put {
   position: absolute;
 }
 
@@ -252,39 +551,211 @@ td{
   justify-content: space-between;
   align-items: center;
 }
+
 .collapse-button {
   margin-left: auto;
-  background-color: none;
-        background-color: transparent; /* Remove background */
-      border: none; /* Remove border */
-      color: inherit; /* Inherit text color */
-      cursor: pointer; /* Pointer cursor on hover */
-      font-size: 15px; /* Inherit font size */
-      padding: 0; /* Remove padding */
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0;
 }
+
 table {
   width: 100%;
   table-layout: fixed;
 }
+
 th, td {
   text-align: left;
   padding: 8px;
 }
 
 th:nth-child(1), td:nth-child(1) {
-  width: 10%; /* Set the width for the first column */
+  width: 10%;
 }
+
 th:nth-child(2), td:nth-child(2) {
-  width: 15%; /* Set the width for the second column */
+  width: 15%;
 }
+
 th:nth-child(3), td:nth-child(3) {
-  width: 17%; /* Set the width for the third column */
+  width: 17%;
 }
 
 th:nth-child(4), td:nth-child(4) {
-  width: 53%; /* Set the width for the third column */
+  width: 53%;
 }
 
 th:nth-child(5), td:nth-child(5) {
-  width: 5%; /* Set the width for the third column */
+  width: 5%;
+}
+
+/* List Page Table Styles */
+.table {
+  margin: 2vh 5vw;
+  width: 90vw;
+  font-size: 0.8em;
+  justify-content: center;
+}
+
+.table tr {
+  display: block;
+  margin: 5px;
+  border: dotted rgb(255, 255, 255) 3px;
+}
+
+.table tr:hover {
+  animation: hover 3s ease-in-out infinite;
+}
+
+@keyframes hover {
+  0% {
+    border: dotted rgb(236, 122, 122) 3px;
+    color: black;
+  }
+  50% {
+    border: dotted rgb(255, 157, 52) 3px;
+    color: black;
+  }
+  100% {
+    border: dotted rgb(236, 122, 122) 3px;
+    color: black;
+  }
+}
+
+.table thead tr {
+  text-align: left;
+  font-weight: bold;
+}
+
+.table thead {
+  pointer-events: none;
+}
+
+.table th,
+.table td {
+  padding: 1vw;
+  width: 33vw;
+}
+
+/* ==========================================================================
+   TEXT & CAPTIONS
+   ========================================================================== */
+
+.text {
+  color: black;
+  font-size: 0.8em;
+  letter-spacing: 0.1em;
+  position: absolute;
+  top: 0vh;
+  left: 3vw;
+  width: 70vw;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+}
+
+.hacotext {
+  color: black;
+  font-size: 0.8em;
+  letter-spacing: 0.1em;
+  position: absolute;
+  white-space: nowrap;
+  top: -5vh;
+  left: -6vw;
+  width: 300%;
+  text-align: center;
+  font-weight: bold;
+}
+
+.numbertext {
+  color: black;
+  font-size: 0.7em;
+  position: absolute;
+  top: -7vw;
+}
+
+/* ==========================================================================
+   SPECIAL BUTTONS & LINKS
+   ========================================================================== */
+
+.haco {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.8em;
+  position: relative;
+  color: rgb(255, 251, 0);
+  background-color: black;
+  border: dotted rgb(0, 255, 225) 5px;
+  border-radius: 20px;
+  padding: 1em;
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.haco:hover {
+  position: relative;
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(0, 255, 225);
+  background-color: black;
+  border: dotted rgb(255, 252, 91) 5px;
+  border-radius: 20px;
+  padding: 1em;
+}
+
+.haco2 {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.8em;
+  position: relative;
+  color: rgb(236, 122, 122);
+  background-color: black;
+  border: dotted rgb(238, 213, 255) 5px;
+  border-radius: 20px;
+  padding: 1em;
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.haco2:hover {
+  position: relative;
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(238, 213, 255);
+  background-color: black;
+  border: dotted rgb(236, 122, 122) 5px;
+  border-radius: 20px;
+  padding: 1em;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+footer {
+  text-align: right;
+  bottom: 0;
+  margin: 0px;
+  position: absolute;
+  font-size: 0.5em;
+  letter-spacing: 0.1em;
+  width: 100%;
+  right: 0;
+  flex-shrink: 0;
+  font-family: jap;
+  padding-bottom: 3vh;
+  padding-right: 5vw;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES
+   ========================================================================== */
+
+@media only screen and (max-width: 300px) {
+  .prev, .next, .text {
+    font-size: 11px;
+  }
 }
