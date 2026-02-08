@@ -121,21 +121,14 @@ def generate_gallery_project_html(project):
     for img in project['images']:
         if project['type'] == 'video':
             thumbnail = img.get('thumbnail', img['url'].replace('.mp4', '.png'))
-            html_parts.append(f'''        <a href="{img['url']}" class="project-item video">
-            <img src="{thumbnail}" alt="{project['description']}">
-            <div class="video-overlay">
-                <p>Your browser does not support the video tag.</p>
-            </div>
-        </a>''')
+            html_parts.append(f'                <a href="{img["url"]}"><img src="{thumbnail}" alt="{project["description"]}"></a>')
         else:
-            html_parts.append(f'''        <div class="project-item image">
-            <img src="{img['url']}" alt="{project['description']}">
-        </div>''')
+            html_parts.append(f'                <img src="{img["url"]}" alt="{project["description"]}">')
     
     return '\n'.join(html_parts)
 
 def generate_archive_project_html(project):
-    """Generate HTML for archive project images"""
+    """Generate HTML for archive project images (below table)"""
     if not project['images']:
         return ''
     
@@ -143,11 +136,9 @@ def generate_archive_project_html(project):
     for img in project['images']:
         if project['type'] == 'video':
             thumbnail = img.get('thumbnail', img['url'].replace('.mp4', '.png'))
-            html_parts.append(f'''        <a href="{img['url']}" class="archive-image video">
-            <img src="{thumbnail}" alt="{project['description']}">
-        </a>''')
+            html_parts.append(f'                <a href="{img["url"]}"><img src="{thumbnail}" alt="{project["description"]}"></a>')
         else:
-            html_parts.append(f'''        <img src="{img['url']}" alt="{project['description']}" class="archive-image">''')
+            html_parts.append(f'                <img src="{img["url"]}" alt="{project["description"]}">')
     
     return '\n'.join(html_parts)
 
@@ -185,13 +176,28 @@ def generate_gallery_page(projects):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yukakinoki</title>
     {css_links}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-{generate_nav()}
-    <main class="gallery">
+    <nav>
+        <ul>
+            <li class="aboutbutton"><a href="info.html">INFO</a></li>
+            <li class="gallerybutton"><a href="index.html">GALLERY</a></li>
+            <li class="listbutton"><a href="archive.html">ARCHIVE</a></li>
+        </ul>
+    </nav>
+    
+    <div class="gallery-section">
+        <div class="sample">
+            <div class="scroll-container">
 {project_html}
-    </main>
-{generate_footer()}
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Copyright © {datetime.now().year}, yukakinoki.com</p>
+    </footer>
 </body>
 </html>'''
     
@@ -230,11 +236,19 @@ def generate_archive_page(projects):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive - yukakinoki</title>
     {css_links}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-{generate_nav()}
-    <main class="archive">
-        <table class="archive-table">
+    <nav>
+        <ul>
+            <li class="aboutbutton"><a href="info.html">INFO</a></li>
+            <li class="gallerybutton"><a href="index.html">GALLERY</a></li>
+            <li class="listbutton"><a href="archive.html">ARCHIVE</a></li>
+        </ul>
+    </nav>
+    
+    <div class="archive-container">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>DATE</th>
@@ -248,11 +262,16 @@ def generate_archive_page(projects):
             </tbody>
         </table>
         
-        <div class="archive-images">
+        <div class="sample">
+            <div class="scroll-container">
 {images_html}
+            </div>
         </div>
-    </main>
-{generate_footer()}
+    </div>
+    
+    <footer>
+        <p>Copyright © {datetime.now().year}, yukakinoki.com</p>
+    </footer>
 </body>
 </html>'''
     
@@ -276,9 +295,17 @@ def generate_info_page(info_data):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yukakinoki</title>
     {css_links}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-{generate_nav()}
+    <nav>
+        <ul>
+            <li class="aboutbutton"><a href="info.html">INFO</a></li>
+            <li class="gallerybutton"><a href="index.html">GALLERY</a></li>
+            <li class="listbutton"><a href="archive.html">ARCHIVE</a></li>
+        </ul>
+    </nav>
+    
     <main class="info">
         <section class="bio">
             <p>{bio_en}</p>
@@ -288,7 +315,10 @@ def generate_info_page(info_data):
             <a href="mailto:{contact_email}">{contact_text}</a>
         </section>
     </main>
-{generate_footer()}
+    
+    <footer>
+        <p>Copyright © {datetime.now().year}, yukakinoki.com</p>
+    </footer>
 </body>
 </html>'''
     
