@@ -239,7 +239,8 @@ tbody td:nth-child(4) { width: 50%; }
   gap: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  overflow-y: hidden;
+   overflow-x: auto;
   padding: 0;
   margin: 0;
   will-change: transform;
