@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build script for yukakinoki.com - INTERACTIVE VERSION
+Build script for <span style="text-transform: lowercase;">yukakinoki.com</span> - INTERACTIVE VERSION
 Fetches data from Google Sheets and images from Google Drive folders
 Generates interactive archive with clickable table rows
 """
@@ -51,23 +51,24 @@ def parse_projects(rows):
         
         project = {
             'date': row[0] if len(row) > 0 else '',
-            'project_name': row[1] if len(row) > 1 else '',
-            'client': row[2] if len(row) > 2 else '',
+            'role': row[1] if len(row) > 1 else '',
+            'project_name': row[2] if len(row) > 2 else '',
             'task': row[3] if len(row) > 3 else '',
             'type': row[4] if len(row) > 4 else 'none',
             'media_source': row[5] if len(row) > 5 else '',
-            'thumbnail': row[6] if len(row) > 6 else '',
+            'gallery_thumbnail': row[6] if len(row) > 6 else '',  # NEW: Gallery thumbnail filename
             'description': row[7] if len(row) > 7 else '',
             'category': row[8] if len(row) > 8 else 'archive',
-            'order': int(row[9]) if len(row) > 9 and row[9].isdigit() else 999,
-            'visible': row[10].lower() == 'yes' if len(row) > 10 else True,
-            'images': []
+            'visible': row[9].lower() == 'yes' if len(row) > 9 else True,
+            'images': [],
+            'thumbnail_image': None  # Will be set when fetching images
         }
         
         if project['visible']:
             projects.append(project)
     
-    projects.sort(key=lambda x: x['order'])
+    # Auto-sort by date (most recent first)
+    projects.sort(key=lambda x: x['date'], reverse=True)
     return projects
 
 def fetch_project_images(projects, api_key):
@@ -78,24 +79,40 @@ def fetch_project_images(projects, api_key):
                 print(f"   📁 Fetching images for '{project['project_name']}'...")
                 files = fetch_drive_folder_files(project['media_source'], api_key)
                 
+                thumbnail_found = False
+                
                 for file in files:
-                    project['images'].append({
+                    img_data = {
                         'id': file['id'],
                         'name': file['name'],
                         'url': get_drive_image_url(file['id']),
                         'thumbnail': file.get('thumbnailLink', '')
-                    })
+                    }
+                    project['images'].append(img_data)
+                    
+                    # Check if this is the specified gallery thumbnail
+                    if project['gallery_thumbnail'] and file['name'] == project['gallery_thumbnail']:
+                        project['thumbnail_image'] = img_data
+                        thumbnail_found = True
+                
+                # If no thumbnail specified or not found, use first image
+                if not thumbnail_found and len(project['images']) > 0:
+                    project['thumbnail_image'] = project['images'][0]
                 
                 print(f"      ✅ Found {len(project['images'])} images")
+                if project.get('thumbnail_image'):
+                    print(f"      🖼️  Gallery thumbnail: {project['thumbnail_image']['name']}")
             except Exception as e:
                 print(f"      ⚠️  Error fetching Drive folder: {e}")
         
         elif project['type'] in ['image', 'video']:
-            project['images'].append({
+            img_data = {
                 'url': project['media_source'],
-                'thumbnail': project['thumbnail'],
+                'thumbnail': project.get('gallery_thumbnail', ''),
                 'name': project['project_name']
-            })
+            }
+            project['images'].append(img_data)
+            project['thumbnail_image'] = img_data
     
     return projects
 
@@ -115,19 +132,18 @@ def get_css_links():
 
 
 def generate_gallery_project_html(project):
-    """Generate HTML for a gallery project with multiple images"""
-    if not project['images']:
+    """Generate HTML for a gallery project - shows only the chosen thumbnail"""
+    # Use the specified thumbnail image
+    if not project.get('thumbnail_image'):
         return ''
     
-    html_parts = []
-    for img in project['images']:
-        if project['type'] == 'video':
-            thumbnail = img.get('thumbnail', img['url'].replace('.mp4', '.png'))
-            html_parts.append(f'                <a href="{img["url"]}"><img src="{thumbnail}" alt="{project["description"]}"></a>')
-        else:
-            html_parts.append(f'                <img src="{img["url"]}" alt="{project["description"]}">')
+    img = project['thumbnail_image']
     
-    return '\n'.join(html_parts)
+    if project['type'] == 'video':
+        thumbnail = img.get('thumbnail', img['url'].replace('.mp4', '.png'))
+        return f'                <a href="{img["url"]}"><img src="{thumbnail}" alt="{project["description"]}"></a>'
+    else:
+        return f'                <img src="{img["url"]}" alt="{project["description"]}">'
 
 def generate_gallery_page(projects):
     """Generate the gallery/index page"""
@@ -163,7 +179,7 @@ def generate_gallery_page(projects):
     </div>
     
     <footer>
-        <p>Copyright © {datetime.now().year}, yukakinoki.com</p>
+        <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
     </footer>
 </body>
 </html>'''
@@ -193,8 +209,8 @@ def generate_archive_page(projects):
         # Add table row with data-tab
         table_rows.append(f'''            <tr data-tab="{project_id}">
                 <td>{project['date']}</td>
+                <td>{project['role']}</td>
                 <td>{project['project_name']}</td>
-                <td>{project['client']}</td>
                 <td>{task}</td>
             </tr>''')
         
@@ -248,8 +264,8 @@ def generate_archive_page(projects):
                 <thead>
                     <tr>
                         <th>DATE</th>
+                        <th>ROLE</th>
                         <th>PROJECT</th>
-                        <th>CLIENT</th>
                         <th>TASK</th>
                     </tr>
                 </thead>
@@ -265,7 +281,7 @@ def generate_archive_page(projects):
     </div>
     
     <footer>
-        <p>Copyright © {datetime.now().year}, yukakinoki.com</p>
+        <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
     </footer>
     
     <script src="js/archive.js"></script>
@@ -315,7 +331,7 @@ def generate_info_page(info_data):
     </main>
     
     <footer>
-        <p>Copyright © {datetime.now().year}, yukakinoki.com</p>
+        <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
     </footer>
 </body>
 </html>'''
