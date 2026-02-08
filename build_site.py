@@ -45,8 +45,11 @@ def get_drive_image_url(file_id):
 def parse_projects(rows):
     """Parse all projects from single sheet"""
     projects = []
-    for row in rows:
+    print(f"   DEBUG: Received {len(rows)} rows from Google Sheets")
+    for i, row in enumerate(rows):
+        print(f"   DEBUG: Row {i}: length={len(row)}, data={row[:3] if len(row) >= 3 else row}")
         if len(row) < 4:
+            print(f"   DEBUG: Skipping row {i} - too short")
             continue
         
         project = {
@@ -56,13 +59,16 @@ def parse_projects(rows):
             'task': row[3] if len(row) > 3 else '',
             'type': row[4] if len(row) > 4 else 'none',
             'media_source': row[5] if len(row) > 5 else '',
-            'gallery_thumbnail': row[6] if len(row) > 6 else '',  # NEW: Gallery thumbnail filename
+            'gallery_thumbnail': row[6] if len(row) > 6 else '',
             'description': row[7] if len(row) > 7 else '',
             'category': row[8] if len(row) > 8 else 'archive',
-            'visible': row[9].lower() == 'yes' if len(row) > 9 else True,
+            'order': int(row[9]) if len(row) > 9 and row[9] and str(row[9]).isdigit() else 999,
+            'visible': row[10].lower() == 'yes' if len(row) > 10 else True,
             'images': [],
-            'thumbnail_image': None  # Will be set when fetching images
+            'thumbnail_image': None
         }
+        
+        print(f"   DEBUG: Project '{project['project_name']}' visible={project['visible']}")
         
         if project['visible']:
             projects.append(project)
