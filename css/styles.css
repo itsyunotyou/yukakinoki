@@ -28,7 +28,7 @@
    ========================================================================== */
 
 html {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 body {
@@ -160,9 +160,7 @@ tbody td:nth-child(3) { width: 20%; }
 tbody td:nth-child(4) { width: 50%; }
 
 .table-header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
+  display: none;
 }
 
 .collapse-button {
@@ -318,13 +316,17 @@ footer {
   z-index: 50;
 }
 
+footer p {
+  text-transform: uppercase;
+}
+
 /* ==========================================================================
    MOBILE RESPONSIVE
    ========================================================================== */
 
 @media (max-width: 768px) {
   html {
-    font-size: 14px;
+    font-size: 11px;
   }
   
   body {
@@ -347,6 +349,13 @@ footer {
   .archive-container {
     margin-top: 14vh;
     padding: 1rem 0;
+  }
+  
+  /* Show collapse button on mobile */
+  .table-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
   }
   
   /* Mobile table */
