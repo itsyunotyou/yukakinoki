@@ -15,7 +15,7 @@ SHEET_ID = os.environ.get('GOOGLE_SHEET_ID', '')
 API_KEY = os.environ.get('GOOGLE_API_KEY', '')
 
 # Sheet ranges
-PROJECTS_RANGE = 'Projects!A2:K'
+PROJECTS_RANGE = 'Projects!A2:K100'
 INFO_RANGE = 'Info!A2:B'
 
 def fetch_sheet_data(sheet_id, range_name, api_key):
@@ -284,7 +284,7 @@ def generate_archive_page(projects):
         <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
     </footer>
     
-    <script src="js/archive.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>'''
     
