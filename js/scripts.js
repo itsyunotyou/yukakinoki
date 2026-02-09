@@ -135,14 +135,12 @@ if (toggleButton) {
 }
 
 // Gallery auto-scroll
-console.log("Looking for gallery container...");
 var galleryContainer = document.querySelector(".gallery-section .scroll-container");
-console.log("Gallery container found:", galleryContainer);
 
 if (galleryContainer) {
-  var scrollSpeed = 2; // pixels per frame - FASTER NOW (was 1)
+  var scrollSpeed = 2;
   var scrollPosition = 0;
-  var direction = 1; // 1 for right, -1 for left
+  var direction = 1;
   var isPaused = false;
   var isStarted = false;
   
@@ -155,21 +153,11 @@ if (galleryContainer) {
       
       var maxScroll = galleryContainer.scrollWidth - galleryContainer.clientWidth;
       
-      // Debug
-      if (!window.debugLogged) {
-        console.log("Scroll width:", galleryContainer.scrollWidth);
-        console.log("Client width:", galleryContainer.clientWidth);
-        console.log("Max scroll:", maxScroll);
-        window.debugLogged = true;
-      }
-      
       // Reverse direction at ends
       if (scrollPosition >= maxScroll && direction === 1) {
         direction = -1;
-        console.log("Reversing to left");
       } else if (scrollPosition <= 0 && direction === -1) {
         direction = 1;
-        console.log("Reversing to right");
       }
       
       galleryContainer.scrollLeft = scrollPosition;
@@ -178,10 +166,8 @@ if (galleryContainer) {
     requestAnimationFrame(autoScroll);
   }
   
-  // Start auto-scroll after images load
+  // Start after page loads and images fade in
   window.addEventListener('load', function() {
-    console.log("Page loaded, starting fade-in and auto-scroll...");
-    
     // Fade in the gallery
     var opacity = 0;
     var fadeIn = setInterval(function() {
@@ -190,28 +176,22 @@ if (galleryContainer) {
         galleryContainer.style.opacity = opacity;
       } else {
         clearInterval(fadeIn);
-        console.log("Fade-in complete");
       }
     }, 30);
     
-    // Start scrolling after fade
+    // Start scrolling after short delay
     setTimeout(function() {
       isStarted = true;
-      console.log("Auto-scroll started!");
       autoScroll();
     }, 800);
   });
   
   // Pause on hover
   galleryContainer.addEventListener('mouseenter', function() {
-    console.log("Paused");
     isPaused = true;
   });
   
   galleryContainer.addEventListener('mouseleave', function() {
-    console.log("Resumed");
     isPaused = false;
   });
-} else {
-  console.log("Gallery container not found!");
 }
