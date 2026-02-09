@@ -42,6 +42,59 @@ function handleRowClick(row) {
       clearInterval(fadeIn);
     }
   }, 30);
+  
+  // Start auto-scroll for this project
+  startProjectAutoScroll(targetElement);
+}
+
+// Auto-scroll for archive project images
+function startProjectAutoScroll(projectElement) {
+  var scrollContainer = projectElement.querySelector('.scroll-container');
+  if (!scrollContainer) return;
+  
+  var scrollSpeed = 2;
+  var scrollPosition = 0;
+  var direction = 1;
+  var isPaused = false;
+  
+  // Stop any existing animation
+  if (scrollContainer.autoScrollRunning) {
+    scrollContainer.autoScrollRunning = false;
+  }
+  
+  scrollContainer.autoScrollRunning = true;
+  
+  function autoScroll() {
+    if (!scrollContainer.autoScrollRunning) return;
+    
+    if (!isPaused) {
+      scrollPosition += scrollSpeed * direction;
+      
+      var maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      
+      // Reverse direction at ends
+      if (scrollPosition >= maxScroll && direction === 1) {
+        direction = -1;
+      } else if (scrollPosition <= 0 && direction === -1) {
+        direction = 1;
+      }
+      
+      scrollContainer.scrollLeft = scrollPosition;
+    }
+    
+    requestAnimationFrame(autoScroll);
+  }
+  
+  autoScroll();
+  
+  // Pause on hover
+  scrollContainer.addEventListener('mouseenter', function() {
+    isPaused = true;
+  });
+  
+  scrollContainer.addEventListener('mouseleave', function() {
+    isPaused = false;
+  });
 }
 
 // Attach click event listener to each table row
