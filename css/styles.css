@@ -16,11 +16,30 @@
 
 :root {
   --primary-color: #000000;
-  --secondary-color: #0033ff;
+  --secondary-color: #0066ff;
   --bg-white: #ffffff;
   --text-gray: #999999;
   --border-color: #e0e0e0;
   --primary-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Animated gradient for links */
+@keyframes colorShift {
+  0% {
+    color: #0066ff;
+  }
+  25% {
+    color: #00ffff;
+  }
+  50% {
+    color: #ff00ff;
+  }
+  75% {
+    color: #ffff00;
+  }
+  100% {
+    color: #0066ff;
+  }
 }
 
 /* ==========================================================================
@@ -69,17 +88,19 @@ a {
 }
 
 a:hover {
-  color: var(--secondary-color);
+  animation: colorShift 3s infinite;
 }
 
 /* URLs in table should be blue */
 tbody td a {
   color: var(--secondary-color);
   text-decoration: none;
+  transition: none;
 }
 
 tbody td a:hover {
-  opacity: 0.7;
+  animation: colorShift 3s infinite;
+  opacity: 1;
 }
 
 /* ==========================================================================
@@ -114,12 +135,12 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  color: var(--secondary-color);
+  animation: colorShift 3s infinite;
 }
 
 /* Active page styling */
 nav ul li.active a {
-  color: var(--secondary-color);
+  animation: colorShift 3s infinite;
 }
 
 /* ==========================================================================
@@ -177,7 +198,7 @@ tbody tr.selected {
 }
 
 tbody tr.selected a {
-  color: var(--secondary-color);
+  animation: colorShift 3s infinite;
 }
 
 /* Column widths */
@@ -287,7 +308,7 @@ tbody td:nth-child(4) { width: 50%; }
     max-height: 25vh;
     scrollbar-width: none;
     padding: 0;
-    margin: 0 0 0 0;
+    margin: 0;
   }
   
   .table-container::-webkit-scrollbar {
@@ -322,25 +343,28 @@ tbody td:nth-child(4) { width: 50%; }
     padding: 0;
     display: flex;
     flex-direction: column;
+    height: 0;
   }
   
   .project-content {
-    height: 100%;
+    flex: 1;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
+    height: 100%;
   }
   
   .project-content .scroll-container {
     flex: 1;
-    height: 100%;
     gap: 0;
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    align-items: flex-end;
   }
   
   .project-content .scroll-container::-webkit-scrollbar {
@@ -352,7 +376,31 @@ tbody td:nth-child(4) { width: 50%; }
     width: auto;
     flex-shrink: 0;
     object-fit: contain;
+    object-position: bottom;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in forwards;
   }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Stagger fade-in for each image */
+  .project-content .scroll-container img:nth-child(1) { animation-delay: 0.1s; }
+  .project-content .scroll-container img:nth-child(2) { animation-delay: 0.2s; }
+  .project-content .scroll-container img:nth-child(3) { animation-delay: 0.3s; }
+  .project-content .scroll-container img:nth-child(4) { animation-delay: 0.4s; }
+  .project-content .scroll-container img:nth-child(5) { animation-delay: 0.5s; }
+  .project-content .scroll-container img:nth-child(6) { animation-delay: 0.6s; }
+  .project-content .scroll-container img:nth-child(7) { animation-delay: 0.7s; }
+  .project-content .scroll-container img:nth-child(8) { animation-delay: 0.8s; }
+  .project-content .scroll-container img:nth-child(9) { animation-delay: 0.9s; }
+  .project-content .scroll-container img:nth-child(10) { animation-delay: 1s; }
 }
 
 .sample {
@@ -468,7 +516,7 @@ tbody td:nth-child(4) { width: 50%; }
   position: fixed;
   bottom: 1vh;
   left: 1.5vw;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--text-gray);
   font-weight: 300;
   letter-spacing: 0.05em;
@@ -482,7 +530,7 @@ tbody td:nth-child(4) { width: 50%; }
 }
 
 .email-link a:hover {
-  color: var(--secondary-color);
+  animation: colorShift 3s infinite;
 }
 
 /* ==========================================================================
@@ -493,7 +541,7 @@ footer {
   position: fixed;
   bottom: 1vh;
   right: 1.5vw;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--text-gray);
   font-weight: 300;
   letter-spacing: 0.05em;
