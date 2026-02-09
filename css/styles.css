@@ -18,7 +18,7 @@
   --primary-color: #000000;
   --secondary-color: #0015ff;
   --bg-white: #ffffff;
-  --text-gray: #666666;
+  --text-gray: #999999;
   --border-color: #e0e0e0;
   --primary-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -109,7 +109,7 @@ nav ul li a {
   font-size: 1rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--text-gray);
 }
 
@@ -239,8 +239,7 @@ tbody td:nth-child(4) { width: 50%; }
   gap: 0;
   height: 100%;
   width: 100%;
-  overflow-y: hidden;
-   overflow-x: auto;
+  overflow: hidden;
   padding: 0;
   margin: 0;
   will-change: transform;
@@ -453,21 +452,24 @@ tbody td:nth-child(4) { width: 50%; }
   margin-bottom: 4em;
 }
 
-.info .contact {
-  margin-top: 2rem;
-}
-
-.info .contact a {
-  font-size: 1rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 300;
+/* Email link in bottom left corner */
+.email-link {
+  position: fixed;
+  bottom: 1vh;
+  left: 1.5vw;
+  font-size: 0.9rem;
   color: var(--text-gray);
-  border: none;
-  padding-bottom: 0;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  z-index: 50;
+  text-transform: lowercase;
 }
 
-.info .contact a:hover {
+.email-link a {
+  color: var(--text-gray);
+}
+
+.email-link a:hover {
   color: var(--secondary-color);
 }
 
@@ -639,6 +641,13 @@ footer p {
     font-size: 0.7rem;
     bottom: 1vh;
     right: 2vw;
+  }
+  
+  /* Mobile email link */
+  .email-link {
+    font-size: 0.7rem;
+    bottom: 1vh;
+    left: 2vw;
   }
 }
 
