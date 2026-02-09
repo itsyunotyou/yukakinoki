@@ -183,11 +183,13 @@ def generate_gallery_page(projects):
         </div>
     </div>
     
+    <div class="email-link">
+        <a href="mailto:yukakinoki@gmail.com">yukakinoki@gmail.com</a>
+    </div>
+    
     <footer>
         <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
     </footer>
-      <script src="js/scripts.js" defer></script>
-
 </body>
 </html>'''
     
@@ -287,12 +289,15 @@ def generate_archive_page(projects):
         </div>
     </div>
     
+    <div class="email-link">
+        <a href="mailto:yukakinoki@gmail.com">yukakinoki@gmail.com</a>
+    </div>
+    
     <footer>
         <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
     </footer>
     
-      <script src="js/scripts.js" defer></script>
-
+    <script src="js/scripts.js"></script>
 </body>
 </html>'''
     
@@ -333,10 +338,11 @@ def generate_info_page(info_data):
             <p>{bio_en}</p>
             <p>{bio_jp}</p>
         </section>
-        <section class="contact">
-            <a href="mailto:{contact_email}">{contact_text}</a>
-        </section>
     </main>
+    
+    <div class="email-link">
+        <a href="mailto:yukakinoki@gmail.com">yukakinoki@gmail.com</a>
+    </div>
     
     <footer>
         <p>Copyright © {datetime.now().year}, <span style="text-transform: lowercase;">yukakinoki.com</span></p>
