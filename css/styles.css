@@ -239,10 +239,16 @@ tbody td:nth-child(4) { width: 50%; }
   gap: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding: 0;
   margin: 0;
   will-change: transform;
+  scrollbar-width: none;
+}
+
+.gallery-section .scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 .gallery-section .scroll-container img {
@@ -640,14 +646,14 @@ footer p {
   footer {
     font-size: 0.7rem;
     bottom: 1vh;
-    right: 2vw;
+    right: 1.5vw;
   }
   
   /* Mobile email link */
   .email-link {
     font-size: 0.7rem;
     bottom: 1vh;
-    left: 2vw;
+    left: 1.5vw;
   }
 }
 
