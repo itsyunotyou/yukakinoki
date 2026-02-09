@@ -134,21 +134,36 @@ if (toggleButton) {
   });
 }
 
-// Gallery auto-scroll
+// Gallery auto-scroll - START IMMEDIATELY
+console.log("=== GALLERY AUTO-SCROLL DEBUG ===");
 var galleryContainer = document.querySelector(".gallery-section .scroll-container");
+console.log("1. Gallery container found:", galleryContainer);
 
 if (galleryContainer) {
+  console.log("2. Container exists, checking dimensions...");
+  console.log("   scrollWidth:", galleryContainer.scrollWidth);
+  console.log("   clientWidth:", galleryContainer.clientWidth);
+  
   var scrollSpeed = 2;
   var scrollPosition = 0;
   var direction = 1;
   var isPaused = false;
-  var isStarted = false;
   
-  // Fade in images on load
+  // Fade in images
   galleryContainer.style.opacity = 0;
+  var opacity = 0;
+  var fadeIn = setInterval(function() {
+    if (opacity < 1) {
+      opacity += 0.05;
+      galleryContainer.style.opacity = opacity;
+    } else {
+      clearInterval(fadeIn);
+      console.log("3. Fade-in complete");
+    }
+  }, 30);
   
   function autoScroll() {
-    if (!isPaused && isStarted) {
+    if (!isPaused) {
       scrollPosition += scrollSpeed * direction;
       
       var maxScroll = galleryContainer.scrollWidth - galleryContainer.clientWidth;
@@ -156,8 +171,10 @@ if (galleryContainer) {
       // Reverse direction at ends
       if (scrollPosition >= maxScroll && direction === 1) {
         direction = -1;
+        console.log("   Reversing to LEFT");
       } else if (scrollPosition <= 0 && direction === -1) {
         direction = 1;
+        console.log("   Reversing to RIGHT");
       }
       
       galleryContainer.scrollLeft = scrollPosition;
@@ -166,32 +183,23 @@ if (galleryContainer) {
     requestAnimationFrame(autoScroll);
   }
   
-  // Start after page loads and images fade in
-  window.addEventListener('load', function() {
-    // Fade in the gallery
-    var opacity = 0;
-    var fadeIn = setInterval(function() {
-      if (opacity < 1) {
-        opacity += 0.05;
-        galleryContainer.style.opacity = opacity;
-      } else {
-        clearInterval(fadeIn);
-      }
-    }, 30);
-    
-    // Start scrolling after short delay
-    setTimeout(function() {
-      isStarted = true;
-      autoScroll();
-    }, 800);
-  });
+  // Start immediately
+  console.log("4. Starting auto-scroll NOW");
+  setTimeout(function() {
+    console.log("5. AUTO-SCROLL STARTED!");
+    autoScroll();
+  }, 800);
   
   // Pause on hover
   galleryContainer.addEventListener('mouseenter', function() {
+    console.log("   Scroll PAUSED");
     isPaused = true;
   });
   
   galleryContainer.addEventListener('mouseleave', function() {
+    console.log("   Scroll RESUMED");
     isPaused = false;
   });
+} else {
+  console.log("ERROR: Gallery container NOT FOUND!");
 }
