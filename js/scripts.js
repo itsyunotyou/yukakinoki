@@ -33,13 +33,15 @@ function handleRowClick(row) {
   
   // Fade-in effect with opacity
   targetElement.style.opacity = 0;
-  var fadeInInterval = setInterval(function() {
-    if (targetElement.style.opacity < 1) {
-      targetElement.style.opacity = parseFloat(targetElement.style.opacity) + 0.1;
+  var opacity = 0;
+  var fadeIn = setInterval(function() {
+    if (opacity < 1) {
+      opacity += 0.1;
+      targetElement.style.opacity = opacity;
     } else {
-      clearInterval(fadeInInterval);
+      clearInterval(fadeIn);
     }
-  }, 50);
+  }, 30);
 }
 
 // Attach click event listener to each table row
@@ -85,11 +87,14 @@ var galleryContainer = document.querySelector(".gallery-section .scroll-containe
 console.log("Gallery container found:", galleryContainer);
 
 if (galleryContainer) {
-  var scrollSpeed = 1; // pixels per frame
+  var scrollSpeed = 2; // pixels per frame - FASTER NOW (was 1)
   var scrollPosition = 0;
   var direction = 1; // 1 for right, -1 for left
   var isPaused = false;
   var isStarted = false;
+  
+  // Fade in images on load
+  galleryContainer.style.opacity = 0;
   
   function autoScroll() {
     if (!isPaused && isStarted) {
@@ -122,12 +127,26 @@ if (galleryContainer) {
   
   // Start auto-scroll after images load
   window.addEventListener('load', function() {
-    console.log("Page loaded, starting auto-scroll in 500ms...");
+    console.log("Page loaded, starting fade-in and auto-scroll...");
+    
+    // Fade in the gallery
+    var opacity = 0;
+    var fadeIn = setInterval(function() {
+      if (opacity < 1) {
+        opacity += 0.05;
+        galleryContainer.style.opacity = opacity;
+      } else {
+        clearInterval(fadeIn);
+        console.log("Fade-in complete");
+      }
+    }, 30);
+    
+    // Start scrolling after fade
     setTimeout(function() {
       isStarted = true;
       console.log("Auto-scroll started!");
       autoScroll();
-    }, 500);
+    }, 800);
   });
   
   // Pause on hover
