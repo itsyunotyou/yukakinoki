@@ -287,7 +287,7 @@ tbody td:nth-child(4) { width: 50%; }
     max-height: 25vh;
     scrollbar-width: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 0 0;
   }
   
   .table-container::-webkit-scrollbar {
@@ -320,15 +320,20 @@ tbody td:nth-child(4) { width: 50%; }
     overflow: hidden;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
   }
   
   .project-content {
     height: 100%;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
   }
   
   .project-content .scroll-container {
+    flex: 1;
     height: 100%;
     gap: 0;
     overflow-x: auto;
@@ -469,6 +474,7 @@ tbody td:nth-child(4) { width: 50%; }
   letter-spacing: 0.05em;
   z-index: 50;
   text-transform: lowercase;
+  line-height: 1;
 }
 
 .email-link a {
@@ -496,6 +502,8 @@ footer {
 
 footer p {
   text-transform: lowercase;
+  margin: 0;
+  line-height: 1;
 }
 
 /* ==========================================================================
