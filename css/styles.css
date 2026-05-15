@@ -23,24 +23,6 @@
   --primary-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-/* Animated gradient for links */
-@keyframes colorShift {
-  0% {
-    color: #0066ff;
-  }
-  25% {
-    color: #00ffff;
-  }
-  50% {
-    color: #ff00ff;
-  }
-  75% {
-    color: #ffff00;
-  }
-  100% {
-    color: #0066ff;
-  }
-}
 
 /* ==========================================================================
    BASE STYLES
@@ -99,7 +81,7 @@ tbody td a {
 }
 
 tbody td a:hover {
-  animation: colorShift 3s infinite;
+  color: #ff00ff;
   opacity: 1;
 }
 
@@ -135,12 +117,12 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  animation: colorShift 3s infinite;
+  color: var(--text-gray);
 }
 
 /* Active page styling */
 nav ul li.active a {
-  animation: colorShift 3s infinite;
+  color: #ff00ff;
 }
 
 /* ==========================================================================
