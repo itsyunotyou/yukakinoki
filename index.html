@@ -240,13 +240,20 @@
   // a tile specifically — not just anywhere in the strip's empty space.
   // skipped entirely once a project is open: hovering the still-visible hero
   // tile would otherwise resume the ticker and silently drift scrollLeft
-  // even though the strip is supposed to be locked in place
-  gridEl.addEventListener('mouseover',e=>{
+  // even though the strip is supposed to be locked in place.
+  // pointerover/out (filtered to real mice) rather than mouseover/out —
+  // mobile Safari synthesizes a mouseover on tap to support :hover-driven
+  // designs, which stuck the strip in its dimmed "hovering" state after
+  // tapping a tile since there's no real mouseout on a touch device to
+  // ever clear it
+  gridEl.addEventListener('pointerover',e=>{
+    if(e.pointerType!=='mouse')return;
     if(gridEl.classList.contains('focused'))return;
     const t=e.target.closest('.tile');
     if(t){ gridEl.classList.add('hovering'); mqPaused=true; }
   });
-  gridEl.addEventListener('mouseout',e=>{
+  gridEl.addEventListener('pointerout',e=>{
+    if(e.pointerType!=='mouse')return;
     if(gridEl.classList.contains('focused'))return;
     if(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.tile'))return;
     gridEl.classList.remove('hovering');
@@ -309,6 +316,7 @@
     heroOriginalSrc=heroEl0.src;
     heroOriginalVid=heroEl0.tagName==='VIDEO';
     tileEl.classList.add('selected');
+    gridEl.classList.remove('hovering'); // in case a touch device left this stuck on
     tileEl.appendChild(backArrow); // sits above the clicked image, not overlapping it
     gridEl.classList.add('focused'); // adds the left padding centering needs
     // compensate the scroll position for that new padding in the same tick,
