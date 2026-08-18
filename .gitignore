@@ -1,0 +1,4 @@
+# raw/unoptimized video source files — too large for the repo (GitHub caps
+# files at 100MB). Compress with avconvert/ffmpeg before adding to images/.
+images/**/*.mov
+images/**/C-S_*

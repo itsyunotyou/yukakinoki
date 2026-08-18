@@ -46,7 +46,7 @@
   .marquee-track.focused{padding-left:50vw}
   .tile{position:relative;display:flex;flex-direction:column;gap:8px;flex:0 0 auto;
     cursor:pointer;transition:opacity .7s var(--ease)}
-  .tile>img{height:30vh;width:auto;display:block;background:#111;
+  .tile>img,.tile>video{height:33vh;width:auto;display:block;background:#111;
     transition:opacity .3s var(--ease)}
   .tile .cap{opacity:0;pointer-events:none;transition:opacity .5s var(--ease);white-space:nowrap}
   .tile .cap .t{display:block;font-weight:500}
@@ -67,10 +67,12 @@
   .marquee-track.focused .tile{opacity:0;pointer-events:none}
   .marquee-track.focused .tile.selected{opacity:1;pointer-events:auto}
   .tile.selected .cap{opacity:1;pointer-events:auto}
-  .carousel{position:absolute;top:0;left:100%;margin-left:8px;width:26vh;height:30vh;
-    column-count:2;column-fill:balance;column-gap:8px;transition:left .35s var(--ease)}
-  .sibling{width:100%;height:auto;display:block;background:#111;cursor:pointer;
-    margin:0 0 8px;break-inside:avoid;
+  .carousel{position:absolute;top:0;left:100%;margin-left:8px;width:22vh;height:33vh;
+    display:flex;flex-direction:column;gap:8px;overflow-y:auto;
+    scrollbar-width:none;-ms-overflow-style:none;
+    transition:left .35s var(--ease)}
+  .carousel::-webkit-scrollbar{display:none}
+  .sibling{width:100%;height:auto;flex:0 0 auto;display:block;background:#111;cursor:pointer;
     opacity:0;transform:translateX(120px);
     transition:transform .6s var(--ease),opacity .4s var(--ease)}
   .sibling.on{opacity:.55;transform:translateX(0)}
@@ -89,8 +91,8 @@
 
   @media(max-width:820px){
     body{font-size:12px}
-    .tile>img{height:26vh}
-    .carousel{width:20vh;height:26vh}
+    .tile>img,.tile>video{height:28.6vh}
+    .carousel{width:18vh;height:28.6vh}
   }
 
   /* cursor confetti trail */
@@ -121,16 +123,17 @@
   const B="https://yukakinoki.com/images/";
   const U=p=>encodeURI(B+p);
   const slugify=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const isVideo=s=>/\.(mp4|m4v|mov|webm)$/i.test(s);
   const PROJ=[
+    {title:"C-Studios",role:"Web Design & Dev, Spatial Installation Design & Dev",year:"2026",link:"https://c-studios.co.uk/",cta:"Visit",
+     imgs:["c-studios/PHOTO-2026-05-29-05-41-06.jpg","c-studios/PHOTO-2026-05-29-05-40-15.jpg","c-studios/PHOTO-2026-05-29-05-41-07.jpg","c-studios/cstudios-web.mp4","c-studios/cstudios-lib.mp4"]},
     {title:"Silk Road",role:"PM & Art Director",year:"2025",link:"https://youtu.be/sCntIugua9E",cta:"Watch",
      imgs:["silkroad/01.png","silkroad/02.png","silkroad/03.png"]},
     {title:"Mizuno MXR Space",role:"Art Director",year:"2025",link:"https://www.youtube.com/watch?v=Q3IbMZrDyHI",cta:"Watch",
      imgs:["mizuno/mizunomxr01.png","mizuno/mizunomxr02.png","mizuno/mizunomxr03.png","mizuno/mizunomxr04.png"]},
     {title:"Kaytranada — Space Invader",role:"Art Director",year:"2025",link:"https://youtu.be/jb2QPbQoZLI",cta:"Watch",
      imgs:["kaytranada/01-kaytranada.png","kaytranada/02-kaytranada.png","kaytranada/03-kaytranada.png","kaytranada/04-kaytranada.png"]},
-    {title:"C-Studios",role:"Web Designer",year:"2025",link:"https://c-studios.co.uk/",cta:"Visit",
-     imgs:["c-studios/01-c-studios.png","c-studios/02-c-studios(1).png","c-studios/02-c-studios.png","c-studios/04-c-studios.png"]},
-    {title:"GFX",role:"Graphic Designer",year:"2025–2026",link:"",cta:"",
+    {title:"Posters & Flyers",role:"Graphic Designer",year:"2025–2026",link:"",cta:"",
      imgs:["gfx/PonPonPot.jpg","gfx/PonPon2year.jpg","gfx/ShokuponShinenkai.jpg","gfx/KatteniMatsuri.jpg","gfx/JazzPoster1.jpg","gfx/JazzPoster2.jpg","gfx/JazzPoster3.jpg"]},
     {title:"A Sundae For Breakfast",role:"Director & Producer",year:"2025",link:"",cta:"",
      imgs:["sundae/752631800_18039769250802635_4047172421191343384_n.jpg","sundae/752839437_18039769241802635_8874249738374554049_n.jpg"]},
@@ -140,8 +143,6 @@
      imgs:["freelance-production/markgong01.jpeg","freelance-production/voguechina01.jpeg","freelance-production/voguechina02.jpeg","freelance-production/starbucksXbeams01.jpeg","freelance-production/starbucksXbeams02.jpeg","freelance-production/madhappy02.webp","freelance-production/madhappyXdisney01.jpeg","freelance-production/madhappyXdisney03 .jpeg"]},
     {title:"Eto Kentaro — Novel",role:"Book & Cover",year:"2025",link:"",cta:"",
      imgs:["etokentaro/eto01.jpeg","etokentaro/eto02.JPG","etokentaro/eto03.jpeg"]},
-    {title:"Push",role:"Art Director",year:"2024",link:"",cta:"",
-     imgs:["push/jck1.png","push/jck2.png","push/casetify.webp"]},
     {title:"Putotoy",role:"Web Designer",year:"2024",link:"https://putotoy.com/",cta:"Visit",
      imgs:["putotoy/putotoy1.png","putotoy/putotoy2.png","putotoy/putotoy3.png"]},
     {title:"Haco Hair Salon",role:"Web & Motion",year:"2023",link:"",cta:"",
@@ -260,8 +261,7 @@
     if(gridEl.classList.contains('focused')) return;
     const p=PROJ[i];
     focusedTile=tileEl;
-    const heroImg=tileEl.querySelector('img');
-    heroOriginalSrc=heroImg.src;
+    heroOriginalSrc=tileEl.querySelector('img').src;
     tileEl.classList.add('selected');
     tileEl.appendChild(backArrow); // sits above the clicked image, not overlapping it
     gridEl.classList.add('focused'); // adds the left padding centering needs
@@ -284,8 +284,8 @@
     requestAnimationFrame(()=>centerTile());
 
     // once the rest of the strip has faded away, lay this project's other
-    // images out as a masonry carousel beside it — click one to swap the
-    // hero image. the carousel's box is sized by CSS the instant it's
+    // images (and videos) out as a masonry carousel beside it — click one to
+    // swap the hero. the carousel's box is sized by CSS the instant it's
     // created, so re-center right away to fit the hero+carousel as one block
     setTimeout(()=>{
       carouselEl=document.createElement('div');
@@ -293,20 +293,23 @@
       tileEl.appendChild(carouselEl);
       centerTile();
       siblings=p.imgs.map((src,k)=>{
-        const im=document.createElement('img');
+        const vid=isVideo(src);
+        const im=document.createElement(vid?'video':'img');
         im.className='sibling'+(k===0?' active':'');
-        im.src=U(src);im.alt=p.title+' '+(k+1);im.decoding='async';im.onerror=()=>im.remove();
+        im.onerror=()=>im.remove();
+        // muted/autoplay must be set before src, or the browser can evaluate
+        // autoplay-eligibility too early and silently never actually play
+        if(vid){
+          im.muted=true;im.loop=true;im.autoplay=true;im.playsInline=true;
+          im.src=U(src);
+          im.play().catch(()=>{});
+        }else{
+          im.alt=p.title+' '+(k+1);im.decoding='async';
+          im.src=U(src);
+        }
         im.onclick=()=>{
           if(im.classList.contains('active'))return;
-          heroImg.style.opacity=0;
-          setTimeout(()=>{
-            if(focusedTile!==tileEl)return; // project was closed mid-swap
-            heroImg.src=U(src);
-            heroImg.style.opacity=1;
-            // deliberately not re-centering here — the hero's left edge and
-            // the carousel stay put, so swapping through images doesn't
-            // re-trigger the whole view sliding around every click
-          },200);
+          swapHero(tileEl,p,src);
           siblings.forEach(s=>s.classList.toggle('active',s===im));
         };
         carouselEl.appendChild(im);
@@ -317,15 +320,56 @@
     },700);
   }
 
+  // swaps whichever element is currently the hero (image or video) for a
+  // new source, replacing the element itself when the media type changes —
+  // deliberately not re-centering, so swapping through the carousel doesn't
+  // re-trigger the whole view sliding around every click
+  function swapHero(tileEl,p,src){
+    const current=tileEl.querySelector(':scope>img,:scope>video');
+    const vid=isVideo(src);
+    current.style.opacity=0;
+    setTimeout(()=>{
+      if(focusedTile!==tileEl)return; // project was closed mid-swap
+      if((current.tagName==='VIDEO')===vid){
+        current.src=U(src);
+        current.style.opacity=1;
+        if(vid){ current.load();current.play().catch(()=>{}); }
+      }else{
+        const next=document.createElement(vid?'video':'img');
+        // muted/autoplay must be set before src (see note above)
+        if(vid){
+          next.muted=true;next.loop=true;next.autoplay=true;next.playsInline=true;
+          next.src=U(src);
+          next.play().catch(()=>{});
+        }else{
+          next.alt=p.title;next.decoding='async';
+          next.src=U(src);
+        }
+        current.replaceWith(next);
+        requestAnimationFrame(()=>next.style.opacity=1);
+      }
+    },200);
+  }
+
   function closeProject(push=true){
     if(focusedTile){
       gridEl.classList.remove('focused');
       marqueeEl.classList.remove('locked');
       focusedTile.classList.remove('selected');
-      const heroImgEl=focusedTile.querySelector('img');
-      heroImgEl.src=heroOriginalSrc;
-      heroImgEl.style.opacity=''; // clear any leftover mid-swap fade, so every
+      // the hero may have been swapped to a <video> while browsing the
+      // carousel — always restore a plain <img> at the original src so the
+      // grid tile is back to exactly what it was before it was opened
+      const current=focusedTile.querySelector(':scope>img,:scope>video');
+      if(current.tagName==='VIDEO'){
+        const img=document.createElement('img');
+        img.src=heroOriginalSrc;img.alt=focusedTile.dataset.i!=null?PROJ[focusedTile.dataset.i].title:'';
+        img.decoding='async';
+        current.replaceWith(img);
+      }else{
+        current.src=heroOriginalSrc;
+        current.style.opacity=''; // clear any leftover mid-swap fade, so every
                                    // tile is back at the same default opacity
+      }
       if(carouselEl) carouselEl.remove();
       carouselEl=null;
       siblings=[];
