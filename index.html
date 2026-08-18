@@ -53,7 +53,7 @@
      without this, centering it would need a negative scrollLeft, which the
      browser just clamps to 0 and the tile never actually reaches center */
   .marquee-track.focused{padding-left:50vw}
-  .tile{position:relative;display:flex;flex-direction:column;gap:8px;flex:0 0 auto;
+  .tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;flex:0 0 auto;
     cursor:pointer;transition:opacity .7s var(--ease)}
   .tile>img,.tile>video{height:37vh;width:auto;display:block;background:#111;
     transition:opacity .3s var(--ease)}
