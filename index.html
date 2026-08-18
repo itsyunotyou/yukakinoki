@@ -29,12 +29,14 @@
   header.top .mail{color:#999;transition:color .2s var(--ease)}
   header.top .mail:hover{color:var(--ink)}
 
-  a.home{position:fixed;left:14px;bottom:14px;z-index:20;max-width:calc(100vw - 28px);
-    white-space:nowrap;overflow:hidden;text-overflow:clip;color:#999;
+  a.home{position:fixed;left:14px;bottom:14px;z-index:20;max-width:min(70vw,520px);
+    white-space:normal;overflow-wrap:break-word;line-height:1.4;color:#999;
     transition:color .2s var(--ease)}
   a.home:hover{color:var(--ink)}
 
-  .copyright{position:fixed;right:14px;bottom:14px;z-index:20;opacity:.55}
+  .copyright{position:fixed;right:14px;bottom:14px;z-index:20;opacity:.55;
+    transition:opacity .2s var(--ease)}
+  body.bio-active .copyright{opacity:0;pointer-events:none}
 
   main{position:relative;height:calc(100svh - var(--hh));overflow:hidden}
 
@@ -230,7 +232,10 @@
     mqResync();
   });
   marqueeEl.addEventListener('touchstart',()=>mqPaused=true,{passive:true});
-  marqueeEl.addEventListener('touchend',mqResync,{passive:true});
+  marqueeEl.addEventListener('touchend',()=>{
+    if(gridEl.classList.contains('focused'))return;
+    mqResync();
+  },{passive:true});
 
   // manual eased scroll tween — used instead of CSS scroll-behavior:smooth,
   // which doesn't reliably complete in every environment. a new call always
@@ -423,6 +428,7 @@
   function playBio(){
     if(bioAnimating)return;
     bioAnimating=true;
+    document.body.classList.add('bio-active');
     let i=BIO_SHORT.length;
     (function typeStep(){
       i++;
@@ -434,7 +440,10 @@
       j--;
       homeLink.textContent=BIO_FULL.slice(0,j);
       if(j>BIO_SHORT.length) setTimeout(eraseStep,20,j);
-      else bioAnimating=false;
+      else{
+        bioAnimating=false;
+        document.body.classList.remove('bio-active');
+      }
     }
   }
   homeLink.onclick=e=>{e.preventDefault();closeProject();playBio();};
