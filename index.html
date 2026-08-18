@@ -161,13 +161,22 @@
     PROJ.forEach((p,i)=>{
       const t=document.createElement('div');
       t.className='tile';t.dataset.i=i;
-      t.innerHTML=`<img src="${U(p.imgs[0])}" alt="${p.title}" loading="lazy" decoding="async">
+      const heroVid=isVideo(p.imgs[0]);
+      t.innerHTML=`${heroVid?'<video muted loop playsinline>':`<img alt="${p.title}" loading="lazy" decoding="async">`}
         <span class="cap">
           <span class="line t">${p.title}</span>
           <span class="line r">${p.role} — ${p.year}</span>
           ${p.link?`<a class="line cta" href="${p.link}" target="_blank" rel="noopener">${p.cta}</a>`
                   :`<span class="line cta none">—</span>`}
         </span>`;
+      const heroEl=t.querySelector(':scope>img,:scope>video');
+      if(heroVid){
+        heroEl.autoplay=true;
+        heroEl.src=U(p.imgs[0]);
+        heroEl.play().catch(()=>{});
+      }else{
+        heroEl.src=U(p.imgs[0]);
+      }
       const ctaLink=t.querySelector('a.cta');
       if(ctaLink) ctaLink.onclick=e=>e.stopPropagation();
       t.onclick=()=>openProject(i,t);
@@ -240,7 +249,7 @@
     requestAnimationFrame(step);
   }
 
-  let focusedTile=null, siblings=[], heroOriginalSrc=null, carouselEl=null;
+  let focusedTile=null, siblings=[], heroOriginalSrc=null, heroOriginalVid=false, carouselEl=null;
 
   // centers the whole expanded block — the hero image plus its carousel,
   // once the carousel exists — not just the hero image on its own.
@@ -260,7 +269,9 @@
     if(gridEl.classList.contains('focused')) return;
     const p=PROJ[i];
     focusedTile=tileEl;
-    heroOriginalSrc=tileEl.querySelector('img').src;
+    const heroEl0=tileEl.querySelector(':scope>img,:scope>video');
+    heroOriginalSrc=heroEl0.src;
+    heroOriginalVid=heroEl0.tagName==='VIDEO';
     tileEl.classList.add('selected');
     tileEl.appendChild(backArrow); // sits above the clicked image, not overlapping it
     gridEl.classList.add('focused'); // adds the left padding centering needs
@@ -370,15 +381,23 @@
       gridEl.classList.remove('focused');
       marqueeEl.classList.remove('locked');
       focusedTile.classList.remove('selected');
-      // the hero may have been swapped to a <video> while browsing the
-      // carousel — always restore a plain <img> at the original src so the
-      // grid tile is back to exactly what it was before it was opened
+      // the hero may have been swapped to a different media type while
+      // browsing the carousel — always restore the original element type
+      // at the original src so the grid tile is back to exactly what it
+      // was before it was opened
       const current=focusedTile.querySelector(':scope>img,:scope>video');
-      if(current.tagName==='VIDEO'){
-        const img=document.createElement('img');
-        img.src=heroOriginalSrc;img.alt=focusedTile.dataset.i!=null?PROJ[focusedTile.dataset.i].title:'';
-        img.decoding='async';
-        current.replaceWith(img);
+      const title=focusedTile.dataset.i!=null?PROJ[focusedTile.dataset.i].title:'';
+      if((current.tagName==='VIDEO')!==heroOriginalVid){
+        const el=document.createElement(heroOriginalVid?'video':'img');
+        if(heroOriginalVid){
+          el.muted=true;el.loop=true;el.playsInline=true;el.autoplay=true;
+          el.src=heroOriginalSrc;
+          el.play().catch(()=>{});
+        }else{
+          el.alt=title;el.decoding='async';
+          el.src=heroOriginalSrc;
+        }
+        current.replaceWith(el);
       }else{
         current.src=heroOriginalSrc;
         current.style.opacity=''; // clear any leftover mid-swap fade, so every
