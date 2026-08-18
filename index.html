@@ -25,9 +25,16 @@
   /* HEADER — persistent across views */
   header.top{height:var(--hh);display:flex;align-items:center;justify-content:space-between;
     padding:0 clamp(14px,2.2vw,28px)}
-  header.top a.home{opacity:1}
   header.top .loc{opacity:.55}
-  header.top .mail{opacity:.55}
+  header.top .mail{color:#999;transition:color .2s var(--ease)}
+  header.top .mail:hover{color:var(--ink)}
+
+  a.home{position:fixed;left:14px;bottom:14px;z-index:20;max-width:calc(100vw - 28px);
+    white-space:nowrap;overflow:hidden;text-overflow:clip;color:#999;
+    transition:color .2s var(--ease)}
+  a.home:hover{color:var(--ink)}
+
+  .copyright{position:fixed;right:14px;bottom:14px;z-index:20;opacity:.55}
 
   main{position:relative;height:calc(100svh - var(--hh));overflow:hidden}
 
@@ -46,7 +53,7 @@
   .marquee-track.focused{padding-left:50vw}
   .tile{position:relative;display:flex;flex-direction:column;gap:8px;flex:0 0 auto;
     cursor:pointer;transition:opacity .7s var(--ease)}
-  .tile>img,.tile>video{height:33vh;width:auto;display:block;background:#111;
+  .tile>img,.tile>video{height:37vh;width:auto;display:block;background:#111;
     transition:opacity .3s var(--ease)}
   .tile .cap{opacity:0;pointer-events:none;transition:opacity .5s var(--ease);white-space:nowrap}
   .tile .cap .t{display:block;font-weight:500}
@@ -67,7 +74,7 @@
   .marquee-track.focused .tile{opacity:0;pointer-events:none}
   .marquee-track.focused .tile.selected{opacity:1;pointer-events:auto}
   .tile.selected .cap{opacity:1;pointer-events:auto}
-  .carousel{position:absolute;top:0;left:100%;margin-left:8px;width:22vh;height:33vh;
+  .carousel{position:absolute;top:0;left:100%;margin-left:8px;width:25vh;height:37vh;
     display:flex;flex-direction:column;gap:8px;overflow-y:auto;
     scrollbar-width:none;-ms-overflow-style:none;
     transition:left .35s var(--ease)}
@@ -77,7 +84,6 @@
     transition:transform .6s var(--ease),opacity .4s var(--ease)}
   .sibling.on{opacity:.55;transform:translateX(0)}
   .sibling.on:hover{opacity:.9}
-  .sibling.active{opacity:1}
 
   /* sits just above the hero image without touching it — kept out of normal
      flow (rather than a flex child before the image) so the tile's own box
@@ -91,26 +97,21 @@
 
   @media(max-width:820px){
     body{font-size:12px}
-    .tile>img,.tile>video{height:28.6vh}
-    .carousel{width:18vh;height:28.6vh}
+    .tile>img,.tile>video{height:32vh}
+    .carousel{width:20vh;height:32vh}
   }
 
-  /* cursor confetti trail */
-  .confetti{position:fixed;top:0;left:0;width:7px;height:11px;pointer-events:none;z-index:9999;
-    will-change:transform,opacity;animation:confetti-fall .9s ease-out forwards}
-  @keyframes confetti-fall{
-    0%{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:1}
-    100%{transform:translate(calc(var(--x) + var(--dx)),calc(var(--y) + 70px)) rotate(calc(var(--r) + 220deg));opacity:0}
-  }
 </style>
 </head>
 <body>
 
 <header class="top">
-  <a class="home" href="#" id="home-link">Yu Kakinoki</a>
   <span class="loc">Tokyo/London</span>
   <a class="mail" href="mailto:yukakinoki@gmail.com">yukakinoki@gmail.com</a>
 </header>
+
+<a class="home" href="#" id="home-link">Yu Kakinoki</a>
+<span class="copyright">© 2026</span>
 
 <main>
   <button class="back-arrow" id="backArrow" aria-label="Back">&larr;</button>
@@ -134,19 +135,17 @@
     {title:"Kaytranada — Space Invader",role:"Art Director",year:"2025",link:"https://youtu.be/jb2QPbQoZLI",cta:"Watch",
      imgs:["kaytranada/01-kaytranada.png","kaytranada/02-kaytranada.png","kaytranada/03-kaytranada.png","kaytranada/04-kaytranada.png"]},
     {title:"Posters & Flyers",role:"Graphic Designer",year:"2025–2026",link:"",cta:"",
-     imgs:["gfx/PonPonPot.jpg","gfx/PonPon2year.jpg","gfx/ShokuponShinenkai.jpg","gfx/KatteniMatsuri.jpg","gfx/JazzPoster1.jpg","gfx/JazzPoster2.jpg","gfx/JazzPoster3.jpg"]},
+     imgs:["gfx/KatteniMatsuri.jpg","gfx/PonPonPot.jpg","gfx/PonPon2year.jpg","gfx/ShokuponShinenkai.jpg","gfx/JazzPoster1.jpg","gfx/JazzPoster2.jpg","gfx/JazzPoster3.jpg"]},
     {title:"A Sundae For Breakfast",role:"Director & Producer",year:"2025",link:"",cta:"",
      imgs:["sundae/752631800_18039769250802635_4047172421191343384_n.jpg","sundae/752839437_18039769241802635_8874249738374554049_n.jpg"]},
-    {title:"Freelance — Art Direction",role:"Art Assistant",year:"2025",link:"",cta:"",
-     imgs:["freelance-art/babylonXbrooks01.png","freelance-art/babylonXbrooks02.png","freelance-art/babylonXbrooks03.png","freelance-art/budweiserXharoshi01.png","freelance-art/budweiserXharoshi02.png","freelance-art/budweiserXharoshi03.png","freelance-art/Screenshot 2026-02-08 at 19.16.55.png","freelance-art/Screenshot 2026-02-08 at 19.17.06.png","freelance-art/Screenshot 2026-02-08 at 19.17.39.png","freelance-art/Screenshot 2026-02-08 at 19.17.51.png"]},
-    {title:"Freelance — Production",role:"Production Assistant",year:"2025",link:"",cta:"",
-     imgs:["freelance-production/markgong01.jpeg","freelance-production/voguechina01.jpeg","freelance-production/voguechina02.jpeg","freelance-production/starbucksXbeams01.jpeg","freelance-production/starbucksXbeams02.jpeg","freelance-production/madhappy02.webp","freelance-production/madhappyXdisney01.jpeg","freelance-production/madhappyXdisney03 .jpeg"]},
     {title:"Eto Kentaro — Novel",role:"Book & Cover",year:"2025",link:"",cta:"",
      imgs:["etokentaro/eto01.jpeg","etokentaro/eto02.JPG","etokentaro/eto03.jpeg"]},
     {title:"Putotoy",role:"Web Designer",year:"2024",link:"https://putotoy.com/",cta:"Visit",
      imgs:["putotoy/putotoy1.png","putotoy/putotoy2.png","putotoy/putotoy3.png"]},
     {title:"Haco Hair Salon",role:"Web & Motion",year:"2023",link:"",cta:"",
-     imgs:["haco/haco1.png","haco/haco2.png","haco/haco3.png","haco/business.png","haco/gogo.png","haco/igpost.png","haco/igstoryad.png","haco/hoxtonad.png"]}
+     imgs:["haco/haco1.png","haco/haco2.png","haco/haco3.png","haco/business.png","haco/gogo.png","haco/igpost.png","haco/igstoryad.png","haco/hoxtonad.png"]},
+    {title:"Misc",role:"Motion Designer",year:"2020",link:"",cta:"",
+     imgs:["misc2/hkg.mp4","misc2/scan.mp4"]}
   ];
   PROJ.forEach(p=>p.slug=slugify(p.title));
 
@@ -283,35 +282,50 @@
     // reads as the view still scrolling on its own
     requestAnimationFrame(()=>centerTile());
 
-    // once the rest of the strip has faded away, lay this project's other
-    // images (and videos) out as a masonry carousel beside it — click one to
-    // swap the hero. the carousel's box is sized by CSS the instant it's
-    // created, so re-center right away to fit the hero+carousel as one block
+    // once the rest of the strip has faded away, lay this project's *other*
+    // images (and videos) out as a carousel beside it — the one currently
+    // shown big is never also listed as an option. click a carousel item to
+    // swap it in as the hero; the image it replaces drops back into the
+    // carousel in its place, so the set of options stays complete
+    let activeIdx=0;
+    function makeSibling(k){
+      const src=p.imgs[k];
+      const vid=isVideo(src);
+      const im=document.createElement(vid?'video':'img');
+      im.className='sibling';
+      im.onerror=()=>im.remove();
+      // muted/autoplay must be set before src, or the browser can evaluate
+      // autoplay-eligibility too early and silently never actually play
+      if(vid){
+        im.muted=true;im.loop=true;im.autoplay=true;im.playsInline=true;
+        im.src=U(src);
+        im.play().catch(()=>{});
+      }else{
+        im.alt=p.title+' '+(k+1);im.decoding='async';
+        im.src=U(src);
+      }
+      im.onclick=()=>{
+        const outgoing=activeIdx;
+        swapHero(tileEl,p,src);
+        activeIdx=k;
+        // this option becomes the hero — fade it out of the carousel...
+        im.classList.remove('on');
+        setTimeout(()=>im.remove(),400);
+        // ...and the image it replaced rejoins the carousel in its place
+        const back=makeSibling(outgoing);
+        im.after(back);
+        requestAnimationFrame(()=>back.classList.add('on'));
+        siblings=siblings.filter(s=>s!==im).concat(back);
+      };
+      return im;
+    }
     setTimeout(()=>{
       carouselEl=document.createElement('div');
       carouselEl.className='carousel';
       tileEl.appendChild(carouselEl);
       centerTile();
-      siblings=p.imgs.map((src,k)=>{
-        const vid=isVideo(src);
-        const im=document.createElement(vid?'video':'img');
-        im.className='sibling'+(k===0?' active':'');
-        im.onerror=()=>im.remove();
-        // muted/autoplay must be set before src, or the browser can evaluate
-        // autoplay-eligibility too early and silently never actually play
-        if(vid){
-          im.muted=true;im.loop=true;im.autoplay=true;im.playsInline=true;
-          im.src=U(src);
-          im.play().catch(()=>{});
-        }else{
-          im.alt=p.title+' '+(k+1);im.decoding='async';
-          im.src=U(src);
-        }
-        im.onclick=()=>{
-          if(im.classList.contains('active'))return;
-          swapHero(tileEl,p,src);
-          siblings.forEach(s=>s.classList.toggle('active',s===im));
-        };
+      siblings=p.imgs.map((src,k)=>k).filter(k=>k!==0).map(k=>{
+        const im=makeSibling(k);
         carouselEl.appendChild(im);
         return im;
       });
@@ -381,7 +395,30 @@
     if(push) history.pushState({},'','#');
   }
 
-  homeLink.onclick=e=>{e.preventDefault();closeProject();};
+  // clicking the name still goes home, and also types out a short bio in
+  // place of the name — "Yu Kakinoki" is a literal prefix of the full bio,
+  // so erasing back down to that length naturally leaves the name showing
+  const BIO_FULL="Yu Kakinoki (2001) is a designer working between digital and physical space, drawing on cinema to explore image, atmosphere, and narrative.";
+  const BIO_SHORT="Yu Kakinoki";
+  let bioAnimating=false;
+  function playBio(){
+    if(bioAnimating)return;
+    bioAnimating=true;
+    let i=BIO_SHORT.length;
+    (function typeStep(){
+      i++;
+      homeLink.textContent=BIO_FULL.slice(0,i);
+      if(i<BIO_FULL.length) setTimeout(typeStep,32);
+      else setTimeout(eraseStep,5000,BIO_FULL.length);
+    })();
+    function eraseStep(j){
+      j--;
+      homeLink.textContent=BIO_FULL.slice(0,j);
+      if(j>BIO_SHORT.length) setTimeout(eraseStep,20,j);
+      else bioAnimating=false;
+    }
+  }
+  homeLink.onclick=e=>{e.preventDefault();closeProject();playBio();};
   backArrow.onclick=e=>{e.stopPropagation();closeProject();};
 
   window.addEventListener('popstate',e=>{
@@ -404,26 +441,6 @@
     if(t) openProject(startIdx,t);
   }
 
-  // cursor confetti trail — neon pink / yellow / purple
-  const CONFETTI_COLORS=['#ff2ea6','#f4ff2e','#b026ff'];
-  let cfLastX=null,cfLastY=null;
-  function spawnConfetti(x,y){
-    const el=document.createElement('span');
-    el.className='confetti';
-    el.style.background=CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)];
-    el.style.setProperty('--x',x+'px');
-    el.style.setProperty('--y',y+'px');
-    el.style.setProperty('--dx',((Math.random()-.5)*60)+'px');
-    el.style.setProperty('--r',(Math.random()*360)+'deg');
-    document.body.appendChild(el);
-    el.addEventListener('animationend',()=>el.remove(),{once:true});
-  }
-  window.addEventListener('pointermove',e=>{
-    if(e.pointerType&&e.pointerType!=='mouse')return;
-    if(cfLastX!==null&&Math.hypot(e.clientX-cfLastX,e.clientY-cfLastY)<14)return;
-    cfLastX=e.clientX;cfLastY=e.clientY;
-    spawnConfetti(e.clientX,e.clientY);
-  });
 </script>
 </body>
 </html>
