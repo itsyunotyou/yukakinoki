@@ -100,7 +100,24 @@
   @media(max-width:820px){
     body{font-size:12px}
     .tile>img,.tile>video{height:32vh}
-    .carousel{width:20vh;height:32vh}
+    /* the expanded hero can no longer be sized purely by height on mobile —
+       a landscape video at 32vh tall can render wider than the screen — so
+       it's capped on both axes and left to keep its own aspect ratio */
+    .tile.selected>img,.tile.selected>video{
+      height:auto;width:auto;max-width:92vw;max-height:44vh}
+    /* the caption normally pushes the tile's flex box taller than the hero;
+       taken out of flow here so the tile's box (and the carousel anchored
+       to it) always matches the hero exactly, not the hero+caption */
+    .tile.selected .cap{position:absolute;top:100%;margin-top:8px;left:0}
+    /* beside-the-hero carousel would run straight off a narrow screen —
+       instead it becomes a horizontal filmstrip sitting above the hero */
+    .carousel{position:absolute;left:0;right:0;top:auto;bottom:calc(100% + 8px);
+      margin-left:0;width:auto;height:64px;flex-direction:row;
+      overflow-x:auto;overflow-y:hidden;padding:0 8px;transition:none}
+    .sibling{width:auto;height:100%;transform:translateY(16px)}
+    /* the back arrow used to sit right above the hero — now the carousel
+       is there instead, so it moves up above the carousel */
+    .back-arrow{bottom:calc(100% + 80px)}
   }
 
 </style>
@@ -263,8 +280,11 @@
   function centerTile(onDone){
     if(!focusedTile) return;
     const rect=focusedTile.getBoundingClientRect();
+    // on mobile the carousel overlays the hero instead of sitting beside it,
+    // so it should never widen the block being centered — only do that on
+    // the desktop beside-the-hero layout
     let blockWidth=rect.width;
-    if(carouselEl) blockWidth=carouselEl.getBoundingClientRect().right-rect.left;
+    if(carouselEl&&window.innerWidth>820) blockWidth=carouselEl.getBoundingClientRect().right-rect.left;
     const target=marqueeEl.scrollLeft+rect.left-(marqueeEl.clientWidth-blockWidth)/2;
     animateScrollLeft(target,onDone);
   }
