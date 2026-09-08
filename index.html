@@ -40,19 +40,14 @@
 
   main{position:relative;height:calc(100svh - var(--hh));overflow:hidden}
 
-  /* the collage strip is the whole interface — opening a project doesn't
-     navigate away, it just fades out the other tiles in place and slides
-     that project's remaining images in beside the one that was clicked */
+  /* the collage strip is the whole interface — clicking a tile's image just
+     clicks through to that project's next image in place, it never navigates
+     away or expands anything */
   .marquee{width:100%;height:100%;display:flex;align-items:center;
     overflow-x:auto;overflow-y:hidden;scroll-behavior:auto;
     scrollbar-width:none;-ms-overflow-style:none}
   .marquee::-webkit-scrollbar{display:none}
-  .marquee.locked{overflow:hidden}
   .marquee-track{display:flex;align-items:flex-start;width:max-content;gap:var(--gap)}
-  /* room to scroll a tile near the start of the strip all the way to center —
-     without this, centering it would need a negative scrollLeft, which the
-     browser just clamps to 0 and the tile never actually reaches center */
-  .marquee-track.focused{padding-left:50vw}
   .tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;flex:0 0 auto;
     cursor:pointer;transition:opacity .7s var(--ease)}
   .tile>img,.tile>video{height:37vh;width:auto;display:block;background:#111;
@@ -62,66 +57,16 @@
   .tile .cap .r{display:block;opacity:.6}
   .tile .cap .cta{display:inline-block;margin-top:.5em;border-bottom:1px solid var(--ink);padding-bottom:1px}
   .tile .cap .cta.none{opacity:.35;border:none;pointer-events:none}
+  /* "active" is JS-driven (hover on desktop, tap-and-hold-for-3s on touch)
+     rather than a plain :hover, so the info can stay up after the pointer
+     leaves and the row can keep sitting still while it does */
   .marquee-track.hovering .tile{opacity:.15}
-  .marquee-track.hovering .tile:hover{opacity:1}
-  .tile:hover .cap{opacity:1;pointer-events:auto}
-
-  /* an opened project: every other tile fades out, the clicked one stays its
-     normal size, and its other images lay out as a masonry carousel beside
-     it that you click through to swap the hero. the carousel is positioned
-     absolutely (off the tile, not a flex sibling in the track) so its height
-     never affects the row's own layout — a tall carousel used to grow the
-     track and re-center everything vertically, shifting the hero image up
-     the instant it appeared */
-  .marquee-track.focused .tile{opacity:0;pointer-events:none}
-  .marquee-track.focused .tile.selected{opacity:1;pointer-events:auto}
-  .tile.selected .cap{opacity:1;pointer-events:auto}
-  .carousel{position:absolute;top:0;left:100%;margin-left:8px;width:25vh;height:37vh;
-    display:flex;flex-direction:column;gap:8px;overflow-y:auto;
-    scrollbar-width:none;-ms-overflow-style:none;
-    transition:left .35s var(--ease)}
-  .carousel::-webkit-scrollbar{display:none}
-  .sibling{width:100%;height:auto;flex:0 0 auto;display:block;background:#111;cursor:pointer;
-    opacity:0;transform:translateX(120px);
-    transition:transform .6s var(--ease),opacity .4s var(--ease)}
-  .sibling.on{opacity:.55;transform:translateX(0)}
-  .sibling.on:hover{opacity:.9}
-
-  /* sits just above the hero image without touching it — kept out of normal
-     flow (rather than a flex child before the image) so the tile's own box
-     still starts exactly at the image's top edge, which is what the
-     masonry carousel aligns itself to */
-  .back-arrow{position:absolute;left:0;bottom:calc(100% + 8px);font-size:18px;
-    color:var(--ink);
-    opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
-  .back-arrow.show{opacity:.55;pointer-events:auto}
-  .back-arrow:hover{opacity:1}
+  .marquee-track.hovering .tile.active{opacity:1}
+  .tile.active .cap{opacity:1;pointer-events:auto}
 
   @media(max-width:820px){
     body{font-size:12px}
     .tile>img,.tile>video{height:32vh}
-    /* left-align the expanded view instead of centering it — there's no
-       reason to reserve space in the middle of a narrow screen the way
-       the desktop layout (hero + beside-it carousel) needs to */
-    .marquee-track.focused{padding-left:14px}
-    /* the expanded hero can no longer be sized purely by height on mobile —
-       a landscape video at 32vh tall can render wider than the screen — so
-       it's capped on both axes and left to keep its own aspect ratio */
-    .tile.selected>img,.tile.selected>video{
-      height:auto;width:auto;max-width:92vw;max-height:44vh}
-    /* the caption normally pushes the tile's flex box taller than the hero;
-       taken out of flow here so the tile's box (and the carousel anchored
-       to it) always matches the hero exactly, not the hero+caption */
-    .tile.selected .cap{position:absolute;top:100%;margin-top:8px;left:0}
-    /* beside-the-hero carousel would run straight off a narrow screen —
-       instead it becomes a horizontal filmstrip sitting above the hero */
-    .carousel{position:absolute;left:0;right:0;top:auto;bottom:calc(100% + 8px);
-      margin-left:0;width:auto;height:64px;flex-direction:row;justify-content:flex-start;
-      overflow-x:auto;overflow-y:hidden;padding:0;transition:none}
-    .sibling{width:auto;height:100%;transform:translateY(16px)}
-    /* the back arrow used to sit right above the hero — now the carousel
-       is there instead, so it moves up above the carousel */
-    .back-arrow{bottom:calc(100% + 80px)}
   }
 
 </style>
@@ -137,7 +82,6 @@
 <span class="copyright">© 2026</span>
 
 <main>
-  <button class="back-arrow" id="backArrow" aria-label="Back">&larr;</button>
   <div class="marquee" id="marquee">
     <div class="marquee-track" id="grid"></div>
   </div>
@@ -146,7 +90,6 @@
 <script>
   const B="https://yukakinoki.com/images/";
   const U=p=>encodeURI(B+p);
-  const slugify=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
   const isVideo=s=>/\.(mp4|m4v|mov|webm)$/i.test(s);
   const PROJ=[
     {title:"C-Studios",role:"Web Design & Dev, Spatial Installation Design & Dev",year:"2026",link:"https://c-studios.co.uk/",cta:"Visit",
@@ -170,16 +113,14 @@
     {title:"Misc",role:"Motion Designer",year:"2020",link:"",cta:"",
      imgs:["misc2/hkg.mp4","misc2/scan.mp4"]}
   ];
-  PROJ.forEach(p=>p.slug=slugify(p.title));
 
   const gridEl=document.getElementById('grid'),
         marqueeEl=document.getElementById('marquee'),
-        mainEl=document.querySelector('main'),
-        homeLink=document.getElementById('home-link'),
-        backArrow=document.getElementById('backArrow');
+        homeLink=document.getElementById('home-link');
 
   // build infinite collage strip — two passes of every project, back to back,
   // so the scroll position can wrap seamlessly at the halfway point
+  const tileImgIdx=new WeakMap(); // each DOM tile clicks through its project's images independently
   for(let pass=0;pass<2;pass++){
     PROJ.forEach((p,i)=>{
       const t=document.createElement('div');
@@ -202,14 +143,56 @@
       }
       const ctaLink=t.querySelector('a.cta');
       if(ctaLink) ctaLink.onclick=e=>e.stopPropagation();
-      t.onclick=()=>openProject(i,t);
+      tileImgIdx.set(t,0);
+      t.onclick=()=>{
+        advanceImage(t,p);
+        showTile(t);
+        // only start the 3s countdown here for taps — a mouse click leaves
+        // the pointer sitting on the tile, so pointerout is what should
+        // schedule the hide once the cursor actually moves away
+        if(!hoveringMouse) scheduleHide();
+      };
       gridEl.appendChild(t);
     });
   }
 
+  // swaps a tile's hero for its next image/video, looping back to the start —
+  // this is the "click through" interaction: clicking the image just steps
+  // to the project's next shot in place, nothing expands or navigates away
+  function advanceImage(t,p){
+    if(p.imgs.length<=1) return;
+    const idx=(tileImgIdx.get(t)+1)%p.imgs.length;
+    tileImgIdx.set(t,idx);
+    const src=p.imgs[idx];
+    const current=t.querySelector(':scope>img,:scope>video');
+    const vid=isVideo(src);
+    current.style.opacity=0;
+    setTimeout(()=>{
+      if((current.tagName==='VIDEO')===vid){
+        current.src=U(src);
+        current.style.opacity=1;
+        if(vid){ current.load();current.play().catch(()=>{}); }
+      }else{
+        const next=document.createElement(vid?'video':'img');
+        // muted/autoplay must be set before src, or the browser can evaluate
+        // autoplay-eligibility too early and silently never actually play
+        if(vid){
+          next.muted=true;next.loop=true;next.autoplay=true;next.playsInline=true;
+          next.src=U(src);
+          next.play().catch(()=>{});
+        }else{
+          next.alt=p.title;next.decoding='async';
+          next.src=U(src);
+        }
+        current.replaceWith(next);
+        requestAnimationFrame(()=>next.style.opacity=1);
+      }
+    },200);
+  }
+
   // continuous auto-scroll, seamlessly wrapping through the duplicated content;
-  // pauses only while the cursor is actually over a tile (not just anywhere
-  // in the strip) so native trackpad/swipe scrolling can take over.
+  // pauses only while a tile is "active" (hovered, or tapped/clicked within
+  // the last 3s — see showTile/scheduleHide below).
   // a private float accumulator drives scrollLeft — re-synced from the real
   // scrollLeft only at pause/resume boundaries — so sub-pixel motion never
   // gets rounded off and re-read back into itself frame after frame (which
@@ -236,227 +219,51 @@
   requestAnimationFrame(mqTick);
   const mqResync=()=>{pos=marqueeEl.scrollLeft;mqPaused=false;};
 
-  // dim every other tile and pause the auto-scroll while the cursor is over
-  // a tile specifically — not just anywhere in the strip's empty space.
-  // skipped entirely once a project is open: hovering the still-visible hero
-  // tile would otherwise resume the ticker and silently drift scrollLeft
-  // even though the strip is supposed to be locked in place.
+  // a tile's info (caption + full opacity while its neighbors dim) stays up
+  // for as long as it's "active": hovering keeps it active continuously,
+  // and a tap/click keeps it active for 3s after the last interaction —
+  // once that expires the row resumes moving on its own
+  let activeTile=null,hideTimer=null,hoveringMouse=false;
+  function showTile(t){
+    if(hideTimer){ clearTimeout(hideTimer); hideTimer=null; }
+    if(activeTile&&activeTile!==t) activeTile.classList.remove('active');
+    activeTile=t;
+    t.classList.add('active');
+    gridEl.classList.add('hovering');
+    mqPaused=true;
+  }
+  function scheduleHide(){
+    if(hideTimer) clearTimeout(hideTimer);
+    hideTimer=setTimeout(()=>{
+      if(activeTile) activeTile.classList.remove('active');
+      activeTile=null;
+      gridEl.classList.remove('hovering');
+      mqResync();
+      hideTimer=null;
+    },3000);
+  }
+
   // pointerover/out (filtered to real mice) rather than mouseover/out —
   // mobile Safari synthesizes a mouseover on tap to support :hover-driven
-  // designs, which stuck the strip in its dimmed "hovering" state after
-  // tapping a tile since there's no real mouseout on a touch device to
-  // ever clear it
+  // designs, which would otherwise fire alongside the tap's own click handling
   gridEl.addEventListener('pointerover',e=>{
     if(e.pointerType!=='mouse')return;
-    if(gridEl.classList.contains('focused'))return;
     const t=e.target.closest('.tile');
-    if(t){ gridEl.classList.add('hovering'); mqPaused=true; }
+    if(t){ hoveringMouse=true; showTile(t); }
   });
   gridEl.addEventListener('pointerout',e=>{
     if(e.pointerType!=='mouse')return;
-    if(gridEl.classList.contains('focused'))return;
     if(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.tile'))return;
-    gridEl.classList.remove('hovering');
-    mqResync();
+    hoveringMouse=false;
+    scheduleHide();
   });
+  // touching the strip pauses auto-scroll immediately so it doesn't fight a
+  // manual swipe; if that touch wasn't a tap on a tile (no active tile),
+  // resume right away rather than waiting on the 3s tap timer
   marqueeEl.addEventListener('touchstart',()=>mqPaused=true,{passive:true});
   marqueeEl.addEventListener('touchend',()=>{
-    if(gridEl.classList.contains('focused'))return;
-    mqResync();
+    if(!activeTile) mqResync();
   },{passive:true});
-
-  // manual eased scroll tween — used instead of CSS scroll-behavior:smooth,
-  // which doesn't reliably complete in every environment. a new call always
-  // supersedes whatever tween is still in flight, so the two back-to-back
-  // corrections on open glide smoothly instead of fighting over scrollLeft
-  let scrollTweenId=0;
-  function animateScrollLeft(target,onDone,duration=450){
-    const myId=++scrollTweenId;
-    const start=marqueeEl.scrollLeft,delta=target-start,t0=performance.now();
-    function step(ts){
-      if(myId!==scrollTweenId) return;
-      const p=Math.min(1,(ts-t0)/duration);
-      marqueeEl.scrollLeft=start+delta*(1-Math.pow(1-p,3));
-      if(p<1) requestAnimationFrame(step); else if(onDone) onDone();
-    }
-    requestAnimationFrame(step);
-  }
-
-  let focusedTile=null, siblings=[], heroOriginalSrc=null, heroOriginalVid=false, carouselEl=null;
-
-  // centers the whole expanded block — the hero image plus its carousel,
-  // once the carousel exists — not just the hero image on its own.
-  // re-measures fresh each call so it self-corrects for any layout drift
-  // instead of snapping
-  const MOBILE_PAD=14; // matches the site's other 14px edge insets
-  const isMobileLayout=()=>window.innerWidth<=820;
-  function centerTile(onDone){
-    if(!focusedTile) return;
-    const rect=focusedTile.getBoundingClientRect();
-    let target;
-    if(isMobileLayout()){
-      // left-align instead of center — the carousel sits above the hero
-      // here rather than beside it, so there's no reason to reserve
-      // horizontal space in the middle of a narrow screen
-      target=marqueeEl.scrollLeft+rect.left-MOBILE_PAD;
-    }else{
-      let blockWidth=rect.width;
-      if(carouselEl) blockWidth=carouselEl.getBoundingClientRect().right-rect.left;
-      target=marqueeEl.scrollLeft+rect.left-(marqueeEl.clientWidth-blockWidth)/2;
-    }
-    animateScrollLeft(target,onDone);
-  }
-
-
-  function openProject(i,tileEl){
-    if(gridEl.classList.contains('focused')) return;
-    const p=PROJ[i];
-    focusedTile=tileEl;
-    const heroEl0=tileEl.querySelector(':scope>img,:scope>video');
-    heroOriginalSrc=heroEl0.src;
-    heroOriginalVid=heroEl0.tagName==='VIDEO';
-    tileEl.classList.add('selected');
-    gridEl.classList.remove('hovering'); // in case a touch device left this stuck on
-    tileEl.appendChild(backArrow); // sits above the clicked image, not overlapping it
-    gridEl.classList.add('focused'); // adds the left padding centering needs
-    // compensate the scroll position for that new padding in the same tick,
-    // before the browser paints — otherwise the tile visibly jumps right the
-    // instant it's added, and only then animates back, reading as a stray
-    // slide-in. This keeps the very next paint visually identical to before,
-    // so the tile's actual move-to-center animation is the only motion seen.
-    marqueeEl.scrollLeft+=isMobileLayout()?MOBILE_PAD:window.innerWidth*.5;
-    marqueeEl.classList.add('locked'); // no manual scrolling once a project is open
-    mqPaused=true;
-    backArrow.classList.add('show');
-    history.pushState({i},'','#'+p.slug);
-
-    // the clicked image always comes to rest centered in the viewport,
-    // moving there directly from wherever it currently is. it re-centers
-    // once more when the carousel appears (below) to fit the whole block,
-    // then never moves again — no ongoing/reactive re-centering, since that
-    // reads as the view still scrolling on its own
-    requestAnimationFrame(()=>centerTile());
-
-    // once the rest of the strip has faded away, lay this project's *other*
-    // images (and videos) out as a carousel beside it — the one currently
-    // shown big is never also listed as an option. click a carousel item to
-    // swap it in as the hero; the image it replaces drops back into the
-    // carousel in its place, so the set of options stays complete
-    let activeIdx=0;
-    function makeSibling(k){
-      const src=p.imgs[k];
-      const vid=isVideo(src);
-      const im=document.createElement(vid?'video':'img');
-      im.className='sibling';
-      im.onerror=()=>im.remove();
-      // muted/autoplay must be set before src, or the browser can evaluate
-      // autoplay-eligibility too early and silently never actually play
-      if(vid){
-        im.muted=true;im.loop=true;im.autoplay=true;im.playsInline=true;
-        im.src=U(src);
-        im.play().catch(()=>{});
-      }else{
-        im.alt=p.title+' '+(k+1);im.decoding='async';
-        im.src=U(src);
-      }
-      im.onclick=()=>{
-        const outgoing=activeIdx;
-        swapHero(tileEl,p,src);
-        activeIdx=k;
-        // this option becomes the hero — fade it out of the carousel...
-        im.classList.remove('on');
-        setTimeout(()=>im.remove(),400);
-        // ...and the image it replaced rejoins the carousel in its place
-        const back=makeSibling(outgoing);
-        im.after(back);
-        requestAnimationFrame(()=>back.classList.add('on'));
-        siblings=siblings.filter(s=>s!==im).concat(back);
-      };
-      return im;
-    }
-    setTimeout(()=>{
-      carouselEl=document.createElement('div');
-      carouselEl.className='carousel';
-      tileEl.appendChild(carouselEl);
-      centerTile();
-      siblings=p.imgs.map((src,k)=>k).filter(k=>k!==0).map(k=>{
-        const im=makeSibling(k);
-        carouselEl.appendChild(im);
-        return im;
-      });
-      // reveal all of them together, not one after another
-      requestAnimationFrame(()=>siblings.forEach(im=>im.classList.add('on')));
-    },700);
-  }
-
-  // swaps whichever element is currently the hero (image or video) for a
-  // new source, replacing the element itself when the media type changes —
-  // deliberately not re-centering, so swapping through the carousel doesn't
-  // re-trigger the whole view sliding around every click
-  function swapHero(tileEl,p,src){
-    const current=tileEl.querySelector(':scope>img,:scope>video');
-    const vid=isVideo(src);
-    current.style.opacity=0;
-    setTimeout(()=>{
-      if(focusedTile!==tileEl)return; // project was closed mid-swap
-      if((current.tagName==='VIDEO')===vid){
-        current.src=U(src);
-        current.style.opacity=1;
-        if(vid){ current.load();current.play().catch(()=>{}); }
-      }else{
-        const next=document.createElement(vid?'video':'img');
-        // muted/autoplay must be set before src (see note above)
-        if(vid){
-          next.muted=true;next.loop=true;next.autoplay=true;next.playsInline=true;
-          next.src=U(src);
-          next.play().catch(()=>{});
-        }else{
-          next.alt=p.title;next.decoding='async';
-          next.src=U(src);
-        }
-        current.replaceWith(next);
-        requestAnimationFrame(()=>next.style.opacity=1);
-      }
-    },200);
-  }
-
-  function closeProject(push=true){
-    if(focusedTile){
-      gridEl.classList.remove('focused');
-      marqueeEl.classList.remove('locked');
-      focusedTile.classList.remove('selected');
-      // the hero may have been swapped to a different media type while
-      // browsing the carousel — always restore the original element type
-      // at the original src so the grid tile is back to exactly what it
-      // was before it was opened
-      const current=focusedTile.querySelector(':scope>img,:scope>video');
-      const title=focusedTile.dataset.i!=null?PROJ[focusedTile.dataset.i].title:'';
-      if((current.tagName==='VIDEO')!==heroOriginalVid){
-        const el=document.createElement(heroOriginalVid?'video':'img');
-        if(heroOriginalVid){
-          el.muted=true;el.loop=true;el.playsInline=true;el.autoplay=true;
-          el.src=heroOriginalSrc;
-          el.play().catch(()=>{});
-        }else{
-          el.alt=title;el.decoding='async';
-          el.src=heroOriginalSrc;
-        }
-        current.replaceWith(el);
-      }else{
-        current.src=heroOriginalSrc;
-        current.style.opacity=''; // clear any leftover mid-swap fade, so every
-                                   // tile is back at the same default opacity
-      }
-      if(carouselEl) carouselEl.remove();
-      carouselEl=null;
-      siblings=[];
-      focusedTile=null;
-      backArrow.classList.remove('show');
-      mainEl.prepend(backArrow);
-      pos=marqueeEl.scrollLeft; mqPaused=false;
-    }
-    if(push) history.pushState({},'','#');
-  }
 
   // clicking the name still goes home, and also types out a short bio in
   // place of the name — "Yu Kakinoki" is a literal prefix of the full bio,
@@ -485,28 +292,7 @@
       }
     }
   }
-  homeLink.onclick=e=>{e.preventDefault();closeProject();playBio();};
-  backArrow.onclick=e=>{e.stopPropagation();closeProject();};
-
-  window.addEventListener('popstate',e=>{
-    const st=e.state;
-    if(st&&st.i!=null){
-      const t=gridEl.querySelector(`.tile[data-i="${st.i}"]`);
-      if(t) openProject(st.i,t);
-    } else closeProject(false);
-  });
-
-  window.addEventListener('keydown',e=>{
-    if(e.key==='Escape') closeProject();
-  });
-
-  // initial route
-  const startSlug=location.hash.replace('#','');
-  const startIdx=PROJ.findIndex(p=>p.slug===startSlug);
-  if(startIdx>=0){
-    const t=gridEl.querySelector(`.tile[data-i="${startIdx}"]`);
-    if(t) openProject(startIdx,t);
-  }
+  homeLink.onclick=e=>{e.preventDefault();playBio();};
 
 </script>
 </body>
