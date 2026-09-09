@@ -50,16 +50,19 @@
   .marquee-track{display:flex;align-items:flex-start;width:max-content;gap:var(--gap)}
   .tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;flex:0 0 auto;
     cursor:pointer;transition:opacity .7s var(--ease)}
+  /* height is fixed, width comes from aspect-ratio (locked in JS to the
+     tile's first-loaded image) rather than each media file's own intrinsic
+     size — object-fit:cover then just fills that same box on every
+     click-through swap instead of resizing the tile and shoving the row */
   .tile>img,.tile>video{height:37vh;width:auto;display:block;background:#111;
-    transition:opacity .3s var(--ease)}
+    object-fit:cover;transition:opacity .3s var(--ease)}
   .tile .cap{opacity:0;pointer-events:none;transition:opacity .5s var(--ease);white-space:nowrap}
   .tile .cap .t{display:block;font-weight:500}
   .tile .cap .r{display:block;opacity:.6}
   .tile .cap .cta{display:inline-block;margin-top:.5em;border-bottom:1px solid var(--ink);padding-bottom:1px}
   .tile .cap .cta.none{opacity:.35;border:none;pointer-events:none}
-  /* "active" is JS-driven (hover on desktop, tap-and-hold-for-3s on touch)
-     rather than a plain :hover, so the info can stay up after the pointer
-     leaves and the row can keep sitting still while it does */
+  /* "active" is JS-driven (hover on desktop, touch-and-hold on touch) rather
+     than a plain :hover so the same class also drives the row-dimming */
   .marquee-track.hovering .tile{opacity:.15}
   .marquee-track.hovering .tile.active{opacity:1}
   .tile.active .cap{opacity:1;pointer-events:auto}
@@ -136,29 +139,56 @@
       const heroEl=t.querySelector(':scope>img,:scope>video');
       if(heroVid){
         heroEl.autoplay=true;
+        heroEl.addEventListener('loadedmetadata',()=>lockRatio(t,heroEl.videoWidth,heroEl.videoHeight),{once:true});
         heroEl.src=U(p.imgs[0]);
         heroEl.play().catch(()=>{});
       }else{
+        heroEl.addEventListener('load',()=>lockRatio(t,heroEl.naturalWidth,heroEl.naturalHeight),{once:true});
         heroEl.src=U(p.imgs[0]);
       }
       const ctaLink=t.querySelector('a.cta');
       if(ctaLink) ctaLink.onclick=e=>e.stopPropagation();
       tileImgIdx.set(t,0);
-      t.onclick=()=>{
-        advanceImage(t,p);
-        showTile(t);
-        // only start the 3s countdown here for taps — a mouse click leaves
-        // the pointer sitting on the tile, so pointerout is what should
-        // schedule the hide once the cursor actually moves away
-        if(!hoveringMouse) scheduleHide();
-      };
+      t.onclick=()=>advanceImage(t,p);
       gridEl.appendChild(t);
     });
   }
 
+  // fixes the tile's media box to its first-loaded image's own aspect ratio —
+  // set once, from the hero, and never touched again by later swaps, so a
+  // portrait image landing after a landscape one crops to fit rather than
+  // resizing the tile (which would shove the whole row sideways)
+  function lockRatio(t,w,h){
+    if(!w||!h)return;
+    const ratio=w+' / '+h;
+    t.dataset.ratio=ratio;
+    t.querySelector(':scope>img,:scope>video').style.aspectRatio=ratio;
+  }
+
+  // fetches a media file fully in the background before it's ever shown,
+  // so swapping it in never shows a blank/broken frame mid-transition
+  function preload(src,vid){
+    return new Promise(resolve=>{
+      if(vid){
+        const v=document.createElement('video');
+        v.muted=true;v.preload='auto';
+        v.addEventListener('loadeddata',resolve,{once:true});
+        v.addEventListener('error',resolve,{once:true});
+        v.src=U(src);
+      }else{
+        const im=new Image();
+        im.onload=resolve;im.onerror=resolve;
+        im.src=U(src);
+      }
+    });
+  }
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
   // swaps a tile's hero for its next image/video, looping back to the start —
   // this is the "click through" interaction: clicking the image just steps
-  // to the project's next shot in place, nothing expands or navigates away
+  // to the project's next shot in place, nothing expands or navigates away.
+  // waits on both the fade-out and the preload together, so a cached file
+  // still gets the full fade and a slow one never flashes an empty frame
   function advanceImage(t,p){
     if(p.imgs.length<=1) return;
     const idx=(tileImgIdx.get(t)+1)%p.imgs.length;
@@ -166,14 +196,16 @@
     const src=p.imgs[idx];
     const current=t.querySelector(':scope>img,:scope>video');
     const vid=isVideo(src);
+    const ratio=t.dataset.ratio;
     current.style.opacity=0;
-    setTimeout(()=>{
+    Promise.all([preload(src,vid),wait(250)]).then(()=>{
       if((current.tagName==='VIDEO')===vid){
         current.src=U(src);
         current.style.opacity=1;
         if(vid){ current.load();current.play().catch(()=>{}); }
       }else{
         const next=document.createElement(vid?'video':'img');
+        if(ratio) next.style.aspectRatio=ratio;
         // muted/autoplay must be set before src, or the browser can evaluate
         // autoplay-eligibility too early and silently never actually play
         if(vid){
@@ -187,12 +219,12 @@
         current.replaceWith(next);
         requestAnimationFrame(()=>next.style.opacity=1);
       }
-    },200);
+    });
   }
 
   // continuous auto-scroll, seamlessly wrapping through the duplicated content;
-  // pauses only while a tile is "active" (hovered, or tapped/clicked within
-  // the last 3s — see showTile/scheduleHide below).
+  // pauses only while a tile is "active" (hovered on desktop, held on touch —
+  // see showTile/hideTile below).
   // a private float accumulator drives scrollLeft — re-synced from the real
   // scrollLeft only at pause/resume boundaries — so sub-pixel motion never
   // gets rounded off and re-read back into itself frame after frame (which
@@ -219,47 +251,45 @@
   requestAnimationFrame(mqTick);
   const mqResync=()=>{pos=marqueeEl.scrollLeft;mqPaused=false;};
 
-  // a tile's info (caption + full opacity while its neighbors dim) stays up
-  // for as long as it's "active": hovering keeps it active continuously,
-  // and a tap/click keeps it active for 3s after the last interaction —
-  // once that expires the row resumes moving on its own
-  let activeTile=null,hideTimer=null,hoveringMouse=false;
+  // a tile's info (caption + full opacity while its neighbors dim) shows the
+  // instant it's "active" and clears the instant it isn't — no lingering
+  // delay either way
+  let activeTile=null;
   function showTile(t){
-    if(hideTimer){ clearTimeout(hideTimer); hideTimer=null; }
     if(activeTile&&activeTile!==t) activeTile.classList.remove('active');
     activeTile=t;
     t.classList.add('active');
     gridEl.classList.add('hovering');
     mqPaused=true;
   }
-  function scheduleHide(){
-    if(hideTimer) clearTimeout(hideTimer);
-    hideTimer=setTimeout(()=>{
-      if(activeTile) activeTile.classList.remove('active');
-      activeTile=null;
-      gridEl.classList.remove('hovering');
-      mqResync();
-      hideTimer=null;
-    },3000);
+  function hideTile(){
+    if(activeTile) activeTile.classList.remove('active');
+    activeTile=null;
+    gridEl.classList.remove('hovering');
+    mqResync();
   }
 
   // pointerover/out (filtered to real mice) rather than mouseover/out —
   // mobile Safari synthesizes a mouseover on tap to support :hover-driven
-  // designs, which would otherwise fire alongside the tap's own click handling
+  // designs, which would otherwise fire alongside the tap's own touch handling
   gridEl.addEventListener('pointerover',e=>{
     if(e.pointerType!=='mouse')return;
     const t=e.target.closest('.tile');
-    if(t){ hoveringMouse=true; showTile(t); }
+    if(t) showTile(t);
   });
   gridEl.addEventListener('pointerout',e=>{
     if(e.pointerType!=='mouse')return;
     if(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.tile'))return;
-    hoveringMouse=false;
-    scheduleHide();
+    hideTile();
   });
-  // touching the strip pauses auto-scroll immediately so it doesn't fight a
-  // manual swipe; if that touch wasn't a tap on a tile (no active tile),
-  // resume right away rather than waiting on the 3s tap timer
+  // touch equivalent of hover: show while held, hide the instant it's
+  // released — touchstart/touchend on the strip itself still cover
+  // pausing/resuming during a plain swipe that never lands on a tile
+  gridEl.addEventListener('touchstart',e=>{
+    const t=e.target.closest('.tile');
+    if(t) showTile(t);
+  },{passive:true});
+  gridEl.addEventListener('touchend',hideTile,{passive:true});
   marqueeEl.addEventListener('touchstart',()=>mqPaused=true,{passive:true});
   marqueeEl.addEventListener('touchend',()=>{
     if(!activeTile) mqResync();
