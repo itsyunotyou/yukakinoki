@@ -182,43 +182,54 @@
       }
     });
   }
-  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const inTransition=new WeakSet(); // guards against overlapping crossfades if clicked mid-transition
 
   // swaps a tile's hero for its next image/video, looping back to the start —
   // this is the "click through" interaction: clicking the image just steps
   // to the project's next shot in place, nothing expands or navigates away.
-  // waits on both the fade-out and the preload together, so a cached file
-  // still gets the full fade and a slow one never flashes an empty frame
+  // the incoming media is stacked directly on top of the current one
+  // (absolutely positioned, same box) and only it fades in — the old one
+  // never fades out on its own, so nothing shows through from behind it.
+  // that's what makes it read as a dissolve straight into the next image
+  // rather than a fade through the page's background
   function advanceImage(t,p){
-    if(p.imgs.length<=1) return;
+    if(p.imgs.length<=1||inTransition.has(t)) return;
     const idx=(tileImgIdx.get(t)+1)%p.imgs.length;
     tileImgIdx.set(t,idx);
     const src=p.imgs[idx];
-    const current=t.querySelector(':scope>img,:scope>video');
     const vid=isVideo(src);
     const ratio=t.dataset.ratio;
-    current.style.opacity=0;
-    Promise.all([preload(src,vid),wait(250)]).then(()=>{
-      if((current.tagName==='VIDEO')===vid){
-        current.src=U(src);
-        current.style.opacity=1;
-        if(vid){ current.load();current.play().catch(()=>{}); }
+    inTransition.add(t);
+    preload(src,vid).then(()=>{
+      const current=t.querySelector(':scope>img,:scope>video');
+      const next=document.createElement(vid?'video':'img');
+      if(ratio) next.style.aspectRatio=ratio;
+      next.style.position='absolute';
+      next.style.top='0';
+      next.style.left='0';
+      next.style.opacity='0';
+      // muted/autoplay must be set before src, or the browser can evaluate
+      // autoplay-eligibility too early and silently never actually play
+      if(vid){
+        next.muted=true;next.loop=true;next.autoplay=true;next.playsInline=true;
+        next.src=U(src);
+        next.play().catch(()=>{});
       }else{
-        const next=document.createElement(vid?'video':'img');
-        if(ratio) next.style.aspectRatio=ratio;
-        // muted/autoplay must be set before src, or the browser can evaluate
-        // autoplay-eligibility too early and silently never actually play
-        if(vid){
-          next.muted=true;next.loop=true;next.autoplay=true;next.playsInline=true;
-          next.src=U(src);
-          next.play().catch(()=>{});
-        }else{
-          next.alt=p.title;next.decoding='async';
-          next.src=U(src);
-        }
-        current.replaceWith(next);
-        requestAnimationFrame(()=>next.style.opacity=1);
+        next.alt=p.title;next.decoding='async';
+        next.src=U(src);
       }
+      current.after(next);
+      requestAnimationFrame(()=>next.style.opacity='1');
+      // once the new layer has fully covered the old one, drop the old
+      // element and let the new one settle back into normal document flow
+      next.addEventListener('transitionend',function done(){
+        next.removeEventListener('transitionend',done);
+        current.remove();
+        next.style.position='';
+        next.style.top='';
+        next.style.left='';
+        inTransition.delete(t);
+      },{once:true});
     });
   }
 
